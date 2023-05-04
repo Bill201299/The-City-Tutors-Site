@@ -1,0 +1,22 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<p>
+
+</p>
+<h1>Deactivate Account</h1>
+<h5>We're really sad you're leaving us {{ tutor.profile.full_name }}!</h1>
+<div>
+    If you have a moment, please let us know why you are deactivating:
+</div>
+
+
+<form method="POST">
+    {% csrf_token %}
+    {% crispy form %}
+</form>
+
+{% endblock %}

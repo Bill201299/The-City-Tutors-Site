@@ -1,0 +1,80 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+
+{% block content %}
+
+<a class="btn btn-primary btn-sm my-2" href="{% if site_location %}{% url 'tutor:site-confirmations' site_location.id %}{% else %}{% url 'tutor:site-confirmations' %}{% endif %}" role="button">Manage Student Confirmations</a>
+
+<h1 class='mb-4'>Manage Unfulfilled Student Requests</h1>
+
+<div class="text-center my-4">
+    <a class="btn btn-outline-primary" href="{% url 'tutor:site-new-request' %}" role="button">Submit a New Request</a>
+</div>
+
+{% if formset.forms %}
+<form method="post">
+    {% csrf_token %}
+    {{ formset.management_form }}
+    {{ formset.non_form_errors.as_ul }}
+    <div class="table-responsive">
+        <table id="formset" class="table">
+            {% for form in formset.forms %}
+            {% if forloop.first %}
+            <thead>
+                <tr>
+                    <th>Request Timestamp</th>
+                    <th>Student</th>
+                    <th>Subject</th>
+                    <th>Request Notes</th>
+                    <th>Cancel</th>
+                </tr>
+            </thead>
+            {% endif %}
+
+            {% if form.instance.status == "Confirmed" %}
+            <tr class="table-success">
+            {% elif form.instance.status == "Pending Confirmation" %}
+            <tr class="table-warning">
+            {% else %}
+            <tr>
+            {% endif %}
+
+                <td>{{ form.instance.timestamp }}</td>
+                <td>{{ form.instance.user }}</td>
+                <td>{{ form.instance.subject.display }} ({{ form.instance.subject.sector.display }})</td>
+
+                {% for field in form.visible_fields %}
+                <td>
+                    {# Include the hidden fields in the form #}
+                    {% if forloop.first %}
+                        {% for hidden in form.hidden_fields %}
+                            {{ hidden }}
+                        {% endfor %}
+                    {% endif %}
+                    {{ field.errors.as_ul }}
+                    {{ field }}
+                </td>
+                
+                
+                <td><a class="btn btn-outline-primary btn-sm" href="{% url 'tutor:site-cancel-request' form.instance.id %}" role="button">Cancel Request</a></td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+
+            <div class="text-center my-4">
+                <p>Click the Update button to save the changes you've made</p>
+                <input type='submit' name='submit' value='Update' class="btn btn-primary btn-lg">
+            </div>
+        </table>
+    </div>
+
+</form>
+
+{% else %}
+<p>There are no student tutoring requests to display.</p>
+
+{% endif %}
+
+{% endblock %}
+
+

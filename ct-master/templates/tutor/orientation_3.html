@@ -1,0 +1,175 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<style>
+	.customnextbutton{
+	display: inline-block;
+	outline: 0;
+	border: none;
+	box-shadow: none;
+	cursor: pointer;
+	padding: 9px 22px;
+	font-size: 22px;
+	height: 50px;
+	font-weight: 400;
+	color: #fff;
+	text-align: center;
+	line-height: normal;
+	background: linear-gradient(90deg,purple 0,#CBC3E3 100%);
+	border-radius: 50px;
+	transition: color .2s ease,background-color .2s ease,box-shadow .2s ease;
+	}
+	.customnextbutton:not([disabled]):focus {
+		box-shadow: 0 0 .25rem rgba(0, 0, 0, 0.5), -.125rem -.125rem 1rem rgba(239, 71, 101, 0.5), .125rem .125rem 1rem rgba(255, 154, 90, 0.5);
+	}
+	.customnextbutton:not([disabled]):hover {
+		box-shadow: 0 0 .25rem rgba(0, 0, 0, 0.5), -.125rem -.125rem 1rem rgba(239, 71, 101, 0.5), .125rem .125rem 1rem rgba(255, 154, 90, 0.5);
+	}
+
+</style>
+
+<a href="{% url 'tutor:orientation-content' %}">
+  <button type="button" class="customnextbutton">back</button>
+</a>
+
+<br>
+<br>
+
+<h2>1. The City Tutors Web App</h2>
+<iframe width="700" height="345" src="https://www.youtube.com/embed/U0D4G1y9WBE"></iframe>
+<br>
+<br>
+
+<hr size="5" width="100%" color="black">  
+
+<p>
+  <b>You may fill out the questions below after you have completed the training.</b>
+</p>
+<form method="POST">
+	{% if not user.orientation3 %}
+		{% csrf_token %}
+		{% crispy form %}
+		<input class="customnextbutton" type='submit' name='submit' value='Submit'>
+
+	{% else %}
+		{{ form.question1.label }}
+		{% for choice in form.question1 %}
+			{% if forloop.counter0 in answer1 %}
+				<div class="select" style="color: green">{{ choice.tag }} {{ forloop.counter }}. {{ choice.choice_label }}</div>
+			{% else %}
+				<div class="select" style="color: red">{{ choice.tag }} {{ forloop.counter }}.  {{ choice.choice_label }}</div>
+			{% endif %}
+		{% endfor %}
+		<br>
+		<p>
+			You chose:
+			{% for answers in user.orientation3.question1 %}
+				{% if answers == '0' %}
+					{% if 0 in answer1 %}
+						<b style="color: green">1</b>
+					{% else %}
+						<b style="color: red">1</b>
+					{% endif %}
+				{% endif %}
+
+				{% if answers == '1' %}
+					{% if 1 in answer1 %}
+						<b style="color: green">2</b>
+					{% else %}
+						<b style="color: red">2</b>
+					{% endif %}
+				{% endif %}
+
+				{% if answers == '2' %}
+					{% if 2 in answer1 %}
+						<b style="color: green">3</b>
+					{% else %}
+						<b style="color: red">3</b>
+					{% endif %}
+				{% endif %}
+
+				{% if answers == '3' %}
+					{% if 3 in answer1 %}
+						<b style="color: green">4</b>
+					{% else %}
+						<b style="color: red">4</b>
+					{% endif %}
+				{% endif %}
+			{% endfor %}
+		</p>
+
+		<p style="padding: 10px; border: 2px solid black;">Explanation:
+			<br>
+			1) The web-app adds flexibility so that you can always change your settings as the semester goes on. If a session is scheduled that you can't attend, log into the tutor portal to set your available hours to 0 so that you will be unavailable to be matched to a student. <br>
+			2) If you have already been matched to a student that you can't attend, you can cancel a confirmation for the meeting, but its best to also send a message to the student in case they don't log into their student portal before the meeting</p>
+
+		<p></p>
+
+    {{ form.question2.label }}
+    {% for choice in form.question2 %}
+      {% if forloop.counter0 in answer2 %}
+        <div class="select" style="color: green">{{ choice.tag }} {{ forloop.counter }}. {{ choice.choice_label }}</div>
+      {% else %}
+        <div class="select" style="color: red">{{ choice.tag }}{{ forloop.counter }}.  {{ choice.choice_label }}</div>
+      {% endif %}
+    {% endfor %}
+
+    <br>
+    <p>
+    You chose:
+    {% for answers in user.orientation3.question2 %}
+      {% if answers == '0' %}
+        {% if 0 in answer2 %}
+          <b style="color: green">1</b>
+        {% else %}
+          <b style="color: red">1</b>
+        {% endif %}
+      {% endif %}
+
+      {% if answers == '1' %}
+        {% if 1 in answer2 %}
+          <b style="color: green">2</b>
+        {% else %}
+          <b style="color: red">2</b>
+        {% endif %}
+      {% endif %}
+      {% if answers == '2' %}
+        {% if 2 in answer2 %}
+          <b style="color: green">3</b>
+        {% else %}
+          <b style="color: red">3</b>
+        {% endif %}
+      {% endif %}
+
+      {% if answers == '3' %}
+        {% if 3 in answer2 %}
+          <b style="color: green">4</b>
+        {% else %}
+          <b style="color: red">4</b>
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+  </p>
+  
+  <p style="padding: 10px; border: 2px solid black;">Explanation:
+		<br>
+		1) If a student asks for help for a subject that you aren't comfortable supporting, then there are a few options that you have to still support them. You can direct them to the student portal to request a tutor for the subject they are asking for. You can also have the student talk to staff at their school for resources that could support them. <br>
+		2) There is no expectation that you are forced to support a subject that you aren't comfortable with. If you wanted to, you could independently brush up on the subject matter, but it isn't a requirement. You can also tell the student that it is outside what you are available to provide support with.</p>
+
+  <p></p>
+
+	{% endif %}
+	{% if user.orientation3 %}
+	<a href="{% url 'tutor:orientation-6' %}">
+    	<button style="display: right; float: right;" type="button" class="customnextbutton">Next Training >>></button>
+  	</a>
+  	{% endif %}
+</form>
+<br>
+<br>
+<br>
+<br>
+{% endblock %}

@@ -1,0 +1,187 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<style>
+	.customnextbutton{
+	display: inline-block;
+	outline: 0;
+	border: none;
+	box-shadow: none;
+	cursor: pointer;
+	padding: 9px 22px;
+	font-size: 22px;
+	height: 50px;
+	font-weight: 400;
+	color: #fff;
+	text-align: center;
+	line-height: normal;
+	background: linear-gradient(90deg,purple 0,#CBC3E3 100%);
+	border-radius: 50px;
+	transition: color .2s ease,background-color .2s ease,box-shadow .2s ease;
+	}
+	.customnextbutton:not([disabled]):focus {
+		box-shadow: 0 0 .25rem rgba(0, 0, 0, 0.5), -.125rem -.125rem 1rem rgba(239, 71, 101, 0.5), .125rem .125rem 1rem rgba(255, 154, 90, 0.5);
+	}
+	.customnextbutton:not([disabled]):hover {
+		box-shadow: 0 0 .25rem rgba(0, 0, 0, 0.5), -.125rem -.125rem 1rem rgba(239, 71, 101, 0.5), .125rem .125rem 1rem rgba(255, 154, 90, 0.5);
+	}
+
+</style>
+
+<a href="{% url 'tutor:orientation-content' %}">
+  <button type="button" class="customnextbutton">back</button>
+</a>
+
+<br>
+<br>
+
+<h2>11. The End of the Session</h2>
+<iframe width="700" height="345" src="https://www.youtube.com/embed/x4TEe5qogDE"></iframe>
+<br>
+<br>
+
+<hr size="5" width="100%" color="black">  
+
+<p>
+  <b>You may fill out the questions below after you have completed the training.</b>
+</p>
+<form method="POST">
+	{% if not user.orientation10 %}
+		{% csrf_token %}
+		{% crispy form %}
+		<input class="customnextbutton" type='submit' name='submit' value='Submit'>
+
+	{% else %}
+		{{ form.question1.label }}
+		{% for choice in form.question1 %}
+			{% if forloop.counter0 in answer1 %}
+				<div class="select" style="color: green">{{ choice.tag }} {{ forloop.counter }}. {{ choice.choice_label }}</div>
+			{% else %}
+				<div class="select" style="color: red">{{ choice.tag }} {{ forloop.counter }}.  {{ choice.choice_label }}</div>
+			{% endif %}
+		{% endfor %}
+		<br>
+		<p>
+			You chose:
+			{% for answers in user.orientation10.question1 %}
+				{% if answers == '0' %}
+					{% if 0 in answer1 %}
+						<b style="color: green">1</b>
+					{% else %}
+						<b style="color: red">1</b>
+					{% endif %}
+				{% endif %}
+
+				{% if answers == '1' %}
+					{% if 1 in answer1 %}
+						<b style="color: green">2</b>
+					{% else %}
+						<b style="color: red">2</b>
+					{% endif %}
+				{% endif %}
+
+				{% if answers == '2' %}
+					{% if 2 in answer1 %}
+						<b style="color: green">3</b>
+					{% else %}
+						<b style="color: red">3</b>
+					{% endif %}
+				{% endif %}
+
+				{% if answers == '3' %}
+					{% if 3 in answer1 %}
+						<b style="color: green">4</b>
+					{% else %}
+						<b style="color: red">4</b>
+					{% endif %}
+				{% endif %}
+
+				{% if answers == '4' %}
+					{% if 4 in answer1 %}
+						<b style="color: green">5</b>
+					{% else %}
+						<b style="color: red">5</b>
+					{% endif %}
+				{% endif %}
+			{% endfor %}
+		</p>
+
+		<p style="padding: 10px; border: 2px solid black;">Explanation:
+			<br>
+			1) At the beginning of the session, we asked the students what they wanted to work on in the session. Towards the end of the session, we want to make sure that all of their concerns are addressed. First we want to ask them if their concerns were addressed, and what they are taking away from the session. If they left anything out, then a tutor can also join in the recapping. <br><br>
+			2) We then want to see if the student is interested in continuing tutoring in the future. If they say yes, the tutor should remind the student to go into their student portal after the session and reserve the same day/time next week to continuing the tutoring for a subsequent week. Also, if they do want to have another session, we want to know what action plan there is for the student to have going into the next session. Don't forget to clock out on your tutor portal when the meeting has ended. <br><br>
+			3) The City Tutors provides no-cost academic support to students. No donation is required from students or their parents in order to continue receiving support.
+		</p>
+
+		<p></p>
+
+    {{ form.question2.label }}
+    {% for choice in form.question2 %}
+      {% if forloop.counter0 in answer2 %}
+        <div class="select" style="color: green">{{ choice.tag }} {{ forloop.counter }}. {{ choice.choice_label }}</div>
+      {% else %}
+        <div class="select" style="color: red">{{ choice.tag }} {{ forloop.counter }}.  {{ choice.choice_label }}</div>
+      {% endif %}
+    {% endfor %}
+
+    <br>
+    <p>
+			You chose:
+			{% for answers in user.orientation10.question2 %}
+				{% if answers == '0' %}
+					{% if 0 in answer2 %}
+						<b style="color: green">1</b>
+					{% else %}
+						<b style="color: red">1</b>
+					{% endif %}
+				{% endif %}
+
+				{% if answers == '1' %}
+					{% if 1 in answer2 %}
+						<b style="color: green">2</b>
+					{% else %}
+						<b style="color: red">2</b>
+					{% endif %}
+				{% endif %}
+				{% if answers == '2' %}
+					{% if 2 in answer2 %}
+						<b style="color: green">3</b>
+					{% else %}
+						<b style="color: red">3</b>
+					{% endif %}
+				{% endif %}
+
+				{% if answers == '3' %}
+					{% if 3 in answer2 %}
+						<b style="color: green">4</b>
+					{% else %}
+						<b style="color: red">4</b>
+					{% endif %}
+				{% endif %}
+			{% endfor %}
+  	</p>
+  
+		<p style="padding: 10px; border: 2px solid black;">Explanation:
+			<br>
+			1) The City Tutors program offers students flexibility to continue or discontinue receiving services at any point. If they can't continue tutoring, the tutor should remind them that the services will still be available for them when they need it. They only need to go into their student portal and make a request when they feel they need support. <br><br>
+			2) If a student does stop receiving support, the web-app will send them an exit ticket on their experience being supported by you. They will need to complete this ticket in order to request services in the future, so they should know this will come up. They can also recommend the tutoring to their peers if they want to, but its not a requirement. <br><br>
+			3) In the event that the tutee discontinuing tutoring affects your schedule, go into the "meetings" tab of the tutor portal and adjust the time and hours availability to reflect the tutoring that you can do moving forward. If you can't continue as a volunteer, set your available hours to "0"
+		</p>
+
+		<p></p>
+
+	{% endif %}
+	{% if user.orientation10 %}
+		<a href="{% url 'tutor:orientation-content' %}">
+			<button style="display: right; float: right;" type="button" class="customnextbutton">Done</button>
+		</a>
+	{% endif %}
+</form>
+<br>
+<br>
+<br>
+<br>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% block extrascripts %}
+  <script type="text/javascript" id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3.0.0/es5/tex-mml-chtml.js">
+  </script>
+{% endblock extrascripts %}
+{% block content %}
+<h2>STEM Tutor Questionnaire</h2>
+{% if not completed %}
+    <p>Please use the following text boxes to describe how you would help a student solve this problem. Be as specific as possible.</p>
+    <p>What is the solution set of the equation: </p>
+    <p>$$\frac{2}{3x+1} = \frac{1}{x} - \frac{6x}{3x+1}$$</p>
+    <form method='post'>
+    {% csrf_token %}
+        {% for form in forms %}
+            {% crispy form %}
+        {% endfor %}
+        <input type='submit' name='submit' value='Submit'>
+    </form>
+{% else %}
+<p>Your response has been saved</p>
+{% endif %}
+{% endblock %}

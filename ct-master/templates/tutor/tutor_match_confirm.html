@@ -1,0 +1,42 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<h1 class="mt-4 mb-3">Confirm Match</h1>
+
+{% if request_already_fulfilled %}
+<p>We're sorry. This student request has alredy been fulfilled.</p>
+{% elif student_time_change %}
+<p>We're sorry. The student has changed their time availability and is no longer available at this time.</p>
+{% else %}
+
+<p>A meeting will be scheduled when you click Confirm. Please review the following information and proceed.</p>
+
+<table class="table">
+    <tr>
+        <th>Sector</th>
+        <td>{{ student_request.user.profile.sector.display }}</td>
+    </tr>
+    <tr>
+        <th>Subject</th>
+        <td>{{ student_request.subject.display }}</td>
+    </tr>
+    <tr>
+        <th>Scheduled Start</th>
+        <td>{{ time }}<br><br><small>Note: If you haven't refreshed this page recently, this date/time may be outdated. Please refresh to see the most accurate start time.</small></td>
+    </tr>
+    <tr>
+        <th>Request Notes from Student</th>
+        <td>{{ student_request.notes }}</td>
+    </tr>
+</table>
+
+<form method="post" class="mt-5">
+    {% csrf_token %}
+    {% crispy form %}
+</form>
+
+{% endif %}
+
+{% endblock %}

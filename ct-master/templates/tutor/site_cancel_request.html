@@ -1,0 +1,39 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+
+{% block content %}
+<h1 class='my-4'>Cancel Student Tutoring Request</h1>
+
+<h4>Are you sure you want to cancel this student's request for tutoring?</h4>
+
+<table class="table my-4">
+    <tbody>
+        <tr>
+            <th>Student</th>
+            <td>{{ request.user }}</td>
+        </tr>
+        <tr>
+            <th>Subject</th>
+            <td>{{ request.subject.display }} ({{ request.subject.sector.display }})</td>
+        </tr>
+        <tr>
+            <th>Created Date</th>
+            <td>{{ request.timestamp }}</td>
+        </tr>
+        <tr>
+            <th>Created By</th>
+            <td>{% if request.created_by == "User" %}Student{% else %}{{ request.created_by }}{% endif %}</td>
+        </tr>
+        <tr>
+            <th>Request Notes</th>
+            <td>{{ request.notes }}</td>
+        </tr>
+    </tbody>
+</table>
+
+<form method="post">
+    {% csrf_token %}
+    <input type='submit' name='submit' value='Cancel Student Request' class="btn btn-danger btn-lg">
+</form>
+
+{% endblock %}

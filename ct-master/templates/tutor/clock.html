@@ -1,0 +1,88 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% block content %}
+<style>
+table{
+  width:100%;
+  table-layout: fixed;
+}
+.tbl-header{
+  border: 1px solid black;
+  border-bottom: none;
+ }
+.tbl-content{
+  height:450px;
+  overflow-x:auto;
+  overflow-y:overlay;
+  margin-top: 0px;
+  border: 1px solid black;
+}
+th{
+  padding: 20px 15px;
+  font-weight: 500;
+  font-size: 15px;
+  color: black;
+}
+td{
+  padding: 15px;
+  vertical-align:middle;
+  font-weight: 300;
+  color: black;
+  border-bottom: gray 0.1px solid;
+  word-wrap: break-word;
+}
+</style>
+{% if not open_meeting %}
+<br>
+<div id="meeting" style="background-color: #f5c062; border-radius: 25px; padding: 3%;">
+  <h2>Clock In/Out</h2>
+  <p>Please note that all times are in Eastern Time. Current time: <b>{{ time|date:'m/d g:i a' }}</b></p>
+  <form method='post'>
+    {% csrf_token %}
+    {% crispy start_clock_form %}
+  </form>
+</div>
+<br>
+<div id="meeting" style="background-color: #87ab7d; border-radius: 25px; padding: 3%;">
+  <h2>Manual Clock In/Out</h2>
+  <p>If you would like to manually clock in/out based on site location and student's name, click <a href="{% url 'tutor:directory' %}">here</a>.</p>
+</div>
+
+{% endif %}
+
+{% if open_meeting %}
+<h5>Meeting Information</h5>
+<ul>
+    <li><strong>Scheduled start</strong>: {{ open_meeting.scheduled_start }}</li>
+    <li><strong>Subject</strong>: {{ open_meeting.subject }}</li>
+</ul>
+
+{% if past_meetings %}
+<h2>Notes From Your Past Meeting</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th style="width: 20%;">Meeting</th>
+            <th>Your Notes</th>
+        </tr>
+    </thead>
+    <tbody style="overflow-y:overlay;">
+        {% for meeting in past_meetings %}
+        <tr>
+            <td ><a href="{% url 'tutor:meeting' %}?id={{meeting.id}}" target="_blank">{{ meeting }}</a></td>
+            <td>{{ meeting.notes }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
+<p>Clock out when your session has ended. You may close and exit this page and return later.</p>
+<form method='post'>
+    {% csrf_token %}
+    {% crispy stop_clock_form %}
+</form>
+
+{% endif %}
+{% endblock %}

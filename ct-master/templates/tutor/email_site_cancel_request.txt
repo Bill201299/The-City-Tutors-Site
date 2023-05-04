@@ -1,0 +1,4 @@
+Hi,
+A site program coordinator has cancelled a tutor request for you.
+If you would like to submit a new request, go to https://app.thecitytutors.org/request.
+The City Tutors

@@ -1,0 +1,250 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% block content %}
+<!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
+<!-- <script>
+    $(document).ready(function(){
+        $("#unfulfilled-button").click(function(){
+            $("#unfulfilled").slideToggle();
+            $(this).text(function(i, text){
+                return text === "Required Orientation Sections -" ? "Required Orientation Sections +": "Required Orientation Sections -";
+            })
+            $("#meeting").hide();
+            $("#past_meetings").hide();
+        });
+        $("#meeting-button").click(function(){
+            $("#meeting").slideToggle();
+            $(this).text(function(i, text){
+                return text === "Optional Orientation Sections -" ? "Optional Orientation Sections +": "Optional Orientation Sections -";
+            })
+            $("#unfulfilled").hide();
+            $("#past_meetings").hide();
+        });
+        $("#past_meeting-button").click(function(){
+            $("#past_meetings").slideToggle();
+            $("#unfulfilled").hide();
+            $("#meeting").hide();
+        });
+    });
+</script> -->
+<link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+<script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
+<style>
+table{
+  width:100%;
+  table-layout: fixed;
+}
+.tbl-header{
+  border: 1px solid black;
+  border-bottom: none;
+ }
+.tbl-content{
+  height: 500px;
+  overflow-x:auto;
+  overflow-y:overlay;
+  margin-top: 0px;
+  border: 1px solid black;
+}
+.custombox{
+    outline: 0;
+    border: none;
+    box-shadow: none;
+    padding: 9px 22px;
+    font-size: 22px;
+    height: inline-block;
+    font-weight: 400;
+    color: #fff;
+    text-align: center;
+    line-height: normal;
+    background: #a3babc;
+    border-radius: 50px;
+    transition: color .2s ease,background-color .2s ease,box-shadow .2s ease;
+    position: relative;
+    left: 37%;
+}
+.custombox:hover{
+    color: #a3babc;
+    background: #fff;
+}
+th{
+  padding: 20px 15px;
+  font-weight: 500;
+  font-size: 15px;
+  color: black;
+  text-transform: uppercase;
+}
+td{
+  padding: 15px;
+  vertical-align:middle;
+  font-weight: 300;
+  font-size: 15px;
+  color: black;
+  
+  border-bottom: gray 0.1px solid;
+}
+/* ::-webkit-scrollbar {
+    width: 15px;
+    background: solid;
+} 
+
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+} 
+::-webkit-scrollbar-thumb {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+}
+::-webkit-scrollbar-thumb:hover {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,1); 
+} */
+
+.noHover{
+    pointer-events: none;
+}
+.rate {
+    float: left;
+    height: 46px;
+    width: 88%;
+  
+}
+.rate:not(:checked) > input {
+    position:absolute;
+    left:-9999px;
+}
+.rate:not(:checked) > label {
+    float: right;
+    width:1em;
+    overflow:hidden;
+    white-space:nowrap;
+    cursor:pointer;
+    font-size:30px;
+    color:#ccc;
+    
+}
+.rate:not(:checked) > label:before {
+    content: '★ ';
+}
+.rate > input:checked ~ label {
+    color: #ffc700;    
+}
+.rate:not(:checked) > label:hover,
+.rate:not(:checked) > label:hover ~ label {
+    color: #deb217;  
+}
+.rate > input:checked + label:hover,
+.rate > input:checked + label:hover ~ label,
+.rate > input:checked ~ label:hover,
+.rate > input:checked ~ label:hover ~ label,
+.rate > label:hover ~ input:checked ~ label {
+    color: #c59b08;
+}
+
+@media only screen and (max-width: 770px) {
+  .one{
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 982px) {
+  .two{
+    display: none;
+  }
+}
+
+.meeting:link{
+    color:blue;
+    text-decoration: none;
+}
+
+.meeting:visited{
+    color: blue;
+    text-decoration: none;
+}
+
+.meeting:hover{
+    color:gray;
+}
+.tooltips {
+    position: relative;
+    display: inline-block;
+  
+}
+
+.tooltips + .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: white; 
+    text-align: center;
+    border-radius: 6px;
+    padding: 10%;
+
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+}
+
+.tooltips:hover + .tooltiptext {
+    visibility: visible;
+}
+</style>
+<br>
+<div id="meeting" style="background-color: #f9bfde; border-radius: 25px; padding: 3%;">
+  <h2>Your Upcoming Meetings</h2>
+
+  {% if scheduled_meetings %}
+  <p>Please note that all times are in Eastern Time. Last page refresh: {{ time|date:'m/d g:i a' }}</p>
+  <table class="table">
+      <thead>
+          <tr>
+              <th>Meeting</th>
+              <th>Students Who Have Confirmed</th>
+              <th>Your Status</th>
+              <th>Your Confirmation Deadline</th>
+          </tr>
+      </thead>
+      <tbody>
+          {% for meeting in scheduled_meetings %}
+          <tr>
+              <td><a href="{% url 'tutor:meeting' %}?id={{meeting.id}}" target="_blank">{{ meeting }}</a></td>
+              <td>{{ meeting.num_confirmed }}</td>
+              <td>{{ meeting.status }}</td>
+              <td>{{ meeting.confirmation_due }}</td>
+          </tr>
+          {% endfor %}
+      </tbody>
+  </table>
+
+  <h2>Cancel Meetings</h2>
+  <form method='post'>
+      {% csrf_token %}
+      {% crispy cancel_meeting_form %}
+  </form>
+  {% else %}
+  <p>You do not have any scheduled meetings.</p>
+  {% endif %}
+</div>
+<br>
+<div id="unfulfilled" style="background-color: #b9e49d; border-radius: 25px; padding: 3%;">
+    <h2>Match Yourself</h2>
+    {% if unfulfilled_requests %}
+    <p>We have <strong>{{ unfulfilled_requests.count }}</strong> student request{{ unfulfilled_requests|pluralize }} waiting to be matched with a tutor. If you are available to support any of these students, we'd love to connect you.</p>
+    <p class="mb-0">Click <a href="{% url 'tutor:tutor-match' %}">here</a> to see the complete list.</p>
+    {% else %}
+    <p>We currently have no students needing help.</p>
+    {% endif %}
+</div>
+<br>
+<div id="opportunities" style="background-color: #549c84; border-radius: 25px; padding: 3%;">
+    <h2>Embedded/In-person Opportunities</h2>
+    <p>Would you like to work with students in-person or to support an instructor in a class? Check out our Embedded/In-person Tutoring Opportunities <a href="https://docs.google.com/document/d/16OXkqcyrZii1IHQeArorigN32cdH670EKWmVq3cu8Qk/edit">here</a>.</p>
+    <p>Interested? Schedule a meeting with Mike here:</p>
+    <a href="" onclick= "Calendly.initPopupWidget({url: 'https://calendly.com/mchin-5/michael-chin-meeting'});return false;">
+        <button class="custombox">
+            Schedule a meeting
+        </button>
+    </a>
+</div>
+<br>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends "base/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<h1 class="my-4">Student Requests Requiring a Tutor</h1>
+
+{% if unfulfilled_requests %}
+<h5>There are {{ unfulfilled_requests.count }} student request{{ unfulfilled_requests|pluralize }} waiting to be matched with a tutor.</h5>
+
+<div class="alert alert-primary" role="alert">
+    <p class='mb-0'>If you find a request that you can accommodate:</p>
+    <ul>
+        <li>Edit your preferences <a href="{% url 'tutor:profile' %}">here</a> to match the request <strong>sector</strong>, <strong>subject</strong>, and at least one <strong>time availability</strong> and click <strong>Save</strong></li>
+        <li>Check your <a href="{% url 'tutor:tutor_portal' %}">meetings</a> after 6pm Eastern to see if you have been matched. (This is when daily automatic matching occurs)</li>
+        <li>If the automatic matching was unsuccessful, please contact Michael.</li>
+    </ul>
+    <p class='mb-0'>Thank you for your support!</p>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Time Since Request</th>
+            <th>Student</th>
+            <th>Sector</th>
+            <th>Subject</th>
+            <th>Availability</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for tutor_request in unfulfilled_requests %}
+        <tr>
+            <td>{{ tutor_request.timestamp|timesince:now }}</td>
+            <td>{{ tutor_request.user }}</td>
+            {% if tutor_request.subject_match %}
+                <td class="table-success">{{ tutor_request.user.profile.sector.display }}</td>
+                {% else %}
+                <td>{{ tutor_request.user.profile.sector.display }}</td>
+            {% endif %}
+            {% if tutor_request.subject_match %}
+                <td class="table-success">{{ tutor_request.subject.display }}</td>
+                {% else %}
+                <td>{{ tutor_request.subject.display }}</td>
+            {% endif %}
+            <td>{{ tutor_request.user.profile.available.all|join:" | " }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% else %}
+<p>There are currently no unfulfilled tutor requests. Thank you for your support!</p>
+
+{% endif %}
+
+{% endblock %}

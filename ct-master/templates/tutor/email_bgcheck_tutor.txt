@@ -1,0 +1,19 @@
+Hello {{ tutor_name }},
+
+I hope everything is well, and that you and your family are staying safe.
+
+As our organization matures and we scale our services, we are adding additional features that will help us better assess our program, more quickly deliver services, and ensure we align with requirements needed to run a standalone non-profit at a city-wide scale. 
+The most important change, and one required by our insurance carrier, is the implementation of a background check on all volunteers.
+
+If you plan to be a volunteer for the upcoming semester, we will have BackgroundInfoUSA send you an email that will provide instructions on how to fill out the background check through their secure website.
+
+You will need to provide your social security number as part of submitting the form on their website. Do not send us your social security number. Do not type your social security number anywhere outside of their website's form.
+
+There is also a $10 fee to execute this background check. We can reimburse you for this fee if you are a student, you volunteer with us for at least two months, and you inform us that you require a reimbursement in two months time.
+
+We will have BackgroundInfoUSA send you an email that will provide instructions on how to fill out the background check. First, we’ll include a link for the background check consent form so that we can officially start the process. Once we have the consent form, I’ll explain the next steps. We need to have the background check completed before we start tutoring again. 
+
+If you have any questions, please let us know,
+
+Sincerely,
+The City Tutors

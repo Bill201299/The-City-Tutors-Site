@@ -1,0 +1,15 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<h1 class='my-4'>Submit Student Tutoring Request for {{ student }}</h1>
+
+<form method="post">
+    {% csrf_token %}
+    {% crispy form %}
+</form>
+
+{% endblock %}
+
+

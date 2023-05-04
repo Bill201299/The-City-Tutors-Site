@@ -1,0 +1,36 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% block content %}
+<h2>Clock Out: Student Assessments</h2>
+
+{% if meeting %}
+<div class='mb-4'>
+    <p>Please fill out assessments for the students who attended this meeting.</p>
+    <p><a href="https://docs.google.com/document/d/1TOkinF3bZ52gGeNj5HzddF7CYmNoOuedaBS_PTCG-Ao/edit">See assessment rubric</a></p>
+    <p>Note: You will not be able to clock into a new session until this is completed.</p>
+    <h5>Meeting</h5>
+    <ul>
+        <li>{{ meeting }}</li>
+        <li><strong>Subject</strong>: {{ meeting.subject }}</li>
+    </ul>
+</div>
+
+<form method="post">
+	{% csrf_token %}
+    {{ formset.management_form }}
+    
+        {% for form in formset %}
+        <table class='mb-4'>
+            {{ form }}
+        </table>
+        {% endfor %}
+    
+    <input type='submit' name='submit' value='Submit' class="btn btn-primary">
+</form>
+{% else %}
+
+<p>This meeting does not exist.</p>
+
+{% endif %}
+{% endblock %}

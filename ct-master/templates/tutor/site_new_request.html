@@ -1,0 +1,23 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+
+{% block content %}
+<h1 class='my-4'>Submit Student Tutoring Request</h1>
+
+<p>Which student would you like to submit a request for?</p>
+
+<table class="table">
+    <tbody>
+        {% for student in students %}
+        <tr>
+            <td><a href="{% url 'tutor:site-new-request-student' student.id %}">{{ student }}</a></td>
+            <td>{{ student.profile.sector }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+{% endblock %}
+
+

@@ -1,0 +1,12 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+{{ form|as_crispy_errors }}
+<form method="post">
+{% csrf_token %}
+    {% crispy form %}
+</form>
+<a href={% url 'password_reset' %}>Forgot Password?</a>
+{% endblock %}

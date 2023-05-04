@@ -1,0 +1,66 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<h2 class='my-4'>Tutoring Hours</h2>
+
+
+<h5 class="my-4">You are currently a <strong>{% if monthly %}monthly{% else %}weekly{% endif %}</strong> volunteer.</h5>
+
+<h4>Change Volunteer Type</h4>
+<p>Check the box if you would like to be a monthly volunteer. Uncheck the box if you would like to contribute week by week.</p>
+<form method='post'>
+    {% csrf_token %}
+    {% crispy type_form %}
+</form>
+
+<div class="container mb-5">
+    <div class="row">
+        <div class="col-sm">
+            {% if not monthly %}
+            <div class="h-100 alert alert-dark text-muted" style="pointer-events: none;">
+            {% else %}
+            <div class="h-100 alert alert-info">
+            {% endif %}
+                <h4>Monthly Tutors</h4>
+                <p>Select this if you want to schedule your volunteering hours for future months. We will automatically stop matching you in months where your hours are set to 0.</p>
+
+                <div class='alert alert-light'>
+                    You have done <strong>{{ current_month_done }}</strong> hour{{ current_month_done|pluralize }} this month.{% if current_month_left %} You have <strong>{{ current_month_left }}</strong> hour{{ current_month_left|pluralize }} left.{% endif %}
+                </div>
+                <form method='post'>
+                    {% csrf_token %}
+                    {% crispy current_monthly_hours_form %}
+                </form>
+
+                <p>Please indicate the number of hours you can tutor in the next few months.</p>
+                <form method='post'>
+                    {% csrf_token %}
+                    {% crispy monthly_hours_form %}
+                </form>
+            </div>
+        </div>
+
+        <div class="col-sm">
+        {% if monthly %}
+        <div class="h-100 alert alert-dark text-muted" style="pointer-events: none;">
+        {% else %}
+        <div class="h-100 alert alert-info">
+        {% endif %}
+            <h4>Weekly Tutors</h4>
+            <p>Select this if you want to be able to increase or decrease your hours on a weekly basis. You will need to change your hours to 0 to stop being matched.</p>
+
+            <div class='alert alert-light'>
+                    You have done <strong>{{ current_week_done }}</strong> hour{{ current_week_done|pluralize }} this week.{% if current_week_left %} You have <strong>{{ current_week_left }}</strong> hour{{ current_week_left|pluralize }} left.{% endif %}
+                </div>
+
+            <form method='post'>
+                {% csrf_token %}
+                {% crispy weekly_hours_form %}
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

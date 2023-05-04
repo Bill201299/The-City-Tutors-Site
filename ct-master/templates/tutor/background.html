@@ -1,0 +1,66 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+<style>
+    .main-menu:link{
+        color:black;
+        text-decoration: none;
+    }
+
+    .main-menu:visited{
+        color: black;
+        text-decoration: none;
+    }
+
+    .main-menu:hover{
+        color:gray;
+    }
+
+    #id_confirm_sign{
+        width: 100%;
+        margin: auto;
+        background-color: #a8c9b8;
+        border-top: none;
+        border-left: none;
+        border-right: none;
+        outline: 0;
+        border-bottom: black 2px solid;
+       
+    }
+    #id_confirm_sign:focus{
+        box-shadow: none;
+        
+    }
+
+</style>
+<p>
+    <h2>Request Background Check</h2>
+    &emsp; <a class = main-menu href="{% url 'tutor:orientation' %}">&#8592 <b style="border-bottom:1px solid red;">MAIN PAGE | Onboarding</b></a>
+    <br>
+    <hr>
+</p>
+<br>
+<div style="width: 50%; margin: auto; background-color: #a8c9b8; padding: 5%; border-radius: 25px; text-align:center;">
+{% if user.backgroundcheckrequest %}
+Your background check request is: <b>{{ user.backgroundcheckrequest.status }}</b>
+{% if user.backgroundcheckrequest.status == "Queued" %}
+<p> An <b>email</b> as been sent to the email address above. Please check your email. </p>
+<a href="{% static '/tutor/Background Check Mandatory Screening Policy.pdf' %}" target="_blank">Background Check Policy</a>
+{% endif %}
+{% if user.backgroundcheckrequest.status == "Approved" %}
+<br><br>
+<a href="{% static '/tutor/Background Check Mandatory Screening Policy.pdf' %}" target="_blank">Background Check Policy</a>
+
+{% endif %}
+{% else %}
+<form method='post'>
+        {% csrf_token %}
+        {% crispy background_form %}
+    
+</form>
+</div>
+
+{% endif %}
+{% endblock %}

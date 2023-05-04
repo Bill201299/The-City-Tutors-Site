@@ -1,0 +1,19 @@
+<div class="container">
+{% for hour in hours %}
+    <div class="row flex-nowrap">
+    {% for day in days %}
+        <div class="col-md-2">
+        <input
+            type="checkbox" class="btn-check" id="{{day}},{{hour}}"
+            style="display:none"
+            value={{forloop.counter0}},{{forloop.parentloop.counter0}}
+            autocomplete="off">
+        <label
+            class="btn btn-outline-primary"
+            for="{{day}},{{hour}}">
+            {{day}}&nbsp;{{hour}}</label><br>
+        </div>
+    {% endfor %}
+    </div>
+{% endfor %}
+</div>

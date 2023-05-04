@@ -1,0 +1,13 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<h1>Weekly Tutoring Hours</h1>
+<form method='post'>
+    {% csrf_token %}
+    {% crispy form %}
+</form>
+
+{% endblock %}

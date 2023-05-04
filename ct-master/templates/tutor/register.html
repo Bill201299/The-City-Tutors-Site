@@ -1,0 +1,47 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% block content %}
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class='nav-link {% if request.GET.tab == "student" or request.GET.tab == None %} active {% endif %}' aria-current="page" href="?tab=student">Get Tutoring</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link {% if request.GET.tab == "volunteer" %} active {% endif %} " href="?tab=volunteer">Volunteer</a>
+  </li>
+</ul>
+{% if request.GET.tab == "volunteer" %}
+  <div class="col-sm">
+    <div class="card my-2">
+      <div class="card-body">
+        <h5 class="card-title">Volunteer</h5>
+        <p class="card-text">Volunteer to tutor anything you want</p>
+        <a href="{% url 'tutor:tutor-registration' %}" class="btn btn-outline-primary">Register</a>
+      </div>
+    </div>
+  </div>
+{% endif %}
+{% if request.GET.tab == "student" or request.GET.tab is None %}
+  <div class="card my-2">
+    <div class="card-body">
+      <h5 class="card-title">K-12 Tutoring</h5>
+      <p class="card-text">For parents seeking tutoring for children in grades K-12</p>
+      <a href="{% url 'tutor:k-12-registration' %}" class="btn btn-outline-primary">Register</a>
+    </div>
+  </div>
+  <div class="card my-2">
+    <div class="card-body">
+      <h5 class="card-title">College Tutoring</h5>
+      <p class="card-text">For students seeking tutoring in college level courses</p>
+      <a href="{% url 'tutor:college-registration' %}" class="btn btn-outline-primary">Register</a>
+    </div>
+  </div>
+  <div class="card my-2">
+    <div class="card-body">
+      <h5 class="card-title">Adult Tutoring</h5>
+      <p class="card-text">For adults seeking tutoring in High School Equivalency</p>
+      <a href="{% url 'tutor:adult-education-registration' %}" class="btn btn-outline-primary">Register</a>
+    </div>
+  </div>
+{% endif %}
+{% endblock %}

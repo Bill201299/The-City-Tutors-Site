@@ -1,0 +1,3 @@
+Hi {{ tutor_name }},
+A student has requested a repeat session. Please confirm you attendance at https://app.thecitytutors.org/manage.
+The City Tutors

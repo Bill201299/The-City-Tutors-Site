@@ -1,0 +1,79 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+
+{% block content %}
+
+<a class="btn btn-primary btn-sm my-2" href="{% if site_location %}{% url 'tutor:site-requests' site_location.id %}{% else %}{% url 'tutor:site-requests' %}{% endif %}" role="button">Manage Student Requests</a>
+
+<h1 class='mb-4'>Manage Student Confirmations</h1>
+
+{% if formset.forms %}
+
+<div class="alert alert-primary" role="alert">
+    Please note: Setting a status as "Cancelled" will cancel the student's attendance in the meeting. This cannot be undone, and the student will need to submit another request to receive support.
+</div>
+
+<form method="post">
+    {% csrf_token %}
+    {{ formset.management_form }}
+    {{ formset.non_form_errors.as_ul }}
+    <div class="table-responsive">
+        <table id="formset" class="table">
+            {% for form in formset.forms %}
+            {% if forloop.first %}
+            <thead>
+                <tr>
+                    <th>Meeting Created</th>
+                    <th>Status</th>
+                    <th>Student</th>
+                    <th>Tutor</th>
+                    <th>Subject</th>
+                    <th>Meeting Scheduled Start</th>
+                </tr>
+            </thead>
+            {% endif %}
+
+            {% if form.instance.status == "Confirmed" %}
+            <tr class="table-success">
+            {% elif form.instance.status == "Pending Confirmation" %}
+            <tr class="table-warning">
+            {% else %}
+            <tr>
+            {% endif %}
+                <td>{{ form.instance.meeting.created_at }}</td>
+                {% for field in form.visible_fields %}
+                <td>
+                    {# Include the hidden fields in the form #}
+                    {% if forloop.first %}
+                        {% for hidden in form.hidden_fields %}
+                            {{ hidden }}
+                        {% endfor %}
+                    {% endif %}
+                    {{ field.errors.as_ul }}
+                    {{ field }}
+                </td>
+                
+                <td>{{ form.instance.user }}</td>
+                <td>{{ form.instance.meeting.tutors_str }}</td>
+                <td>{{ form.instance.meeting.subject.display }} ({{ form.instance.meeting.subject.sector.display }})</td>
+                <td>{{ form.instance.meeting.scheduled_start }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+
+            <div class="text-center my-4">
+                <p>Click the Update button to save the changes you've made</p>
+                <input type='submit' name='submit' value='Update' class="btn btn-primary btn-lg">
+            </div>
+        </table>
+    </div>
+</form>
+
+{% else %}
+<p>There are no student meeting memberships to display.</p>
+
+{% endif %}
+
+{% endblock %}
+
+

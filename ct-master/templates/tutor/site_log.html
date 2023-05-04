@@ -1,0 +1,237 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% block content %}
+
+{% if not request.user.profile.approve_coordinator %}
+<p>Our staff will need to approve your account before you can view the Site Portal.</p>
+
+{% else %}
+
+{% if site_location %}
+    <div>
+        <a class="btn btn-primary btn-sm my-2" href="{% url 'tutor:site-confirmations' site_location.id %}" role="button">Manage Student Confirmations</a>
+        <a class="btn btn-primary btn-sm my-2" href="{% url 'tutor:site-requests' site_location.id %}" role="button">Manage Student Requests</a>
+    </div>
+
+    <h1 class="mb-4">Site Portal - {{ site_location.display }}</h1>
+
+    <a class="btn btn-outline-primary mb-3" href="{% url 'tutor:site_location_download' site_location.id %}" role="button">Download Data (CSV)</a>
+    
+{% else %}
+    <div>
+        <a class="btn btn-primary btn-sm my-2" href="{% url 'tutor:site-confirmations' %}" role="button">Manage Student Confirmations</a>
+        <a class="btn btn-primary btn-sm my-2" href="{% url 'tutor:site-requests' %}" role="button">Manage Student Requests</a>
+    </div>
+
+    <h1 class="mb-4">Site Portal - {{ site.display }}</h1>
+    
+    <a class="btn btn-outline-primary mb-3" href="{% url 'tutor:site_download' %}" role="button">Download Data (CSV)</a>
+    
+    {% if all_site_locations %}
+        <h5>Office Locations</h5>
+        <ul>
+        {% for location in all_site_locations %}
+            <li><a href="{% url 'tutor:site_log' location.id %}">{{ location.display }}</a></li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+{% endif %}
+
+<div class='mb-4'>
+    <h2>Summary</h2>
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Number of students participated</th>
+                <td>{{ at_least_one_meeting.count }}</td>
+            </tr>
+            <tr>
+                <th>Total tutoring hours</th>
+                <td>{{ total_duration }}</td>
+            </tr>
+            <tr>
+                <th>Total number of requests</th>
+                <td>{{ tutor_requests.count }} request{{ tutor_requests.count|pluralize }} ({{ fulfilled_requests.count }} fulfilled, {{ unfulfilled_requests.count }} unfulfilled)</td>
+            </tr>
+            <tr>
+                <th>Total number of meetings</th>
+                <td>{{ meetings.count }} meeting{{ meetings.count|pluralize }} ({{ scheduled_meetings.count }} upcoming, {{ past_meetings.count }} past)</td>
+            </tr>
+            <tr>
+                <th>Average session duration</th>
+                <td>{{ average_duration }}</td>
+            </tr>
+            <tr>
+                <th>Current semester hours ({{ sem_time }})</th>
+                <td>{{ sem_hours }} hours {{ sem_minutes }} minutes</td>
+            </tr>
+            <tr>
+                <th>Hours used this week (Monday~)</th>
+                <td>{{ hours }} hours {{ minutes }} minutes (Max: {{ max_hours }} hours for the week)</td>
+            </tr>
+            <tr>
+                <th>Number of meetings this week</th>
+                <td>{{ week_meetings.count }}</td>
+            </tr>
+            <tr>
+                <th>number of students current week</th>
+                <td>{{ number_of_students_current_week.count }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+{% if tutor_requests %}
+<div class='mb-4'>
+    <h2>All Requests</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Request Created</th>
+                <th>Student</th>
+                <th>Subject</th>
+                <th>Notes</th>
+                <th>Meeting</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for tutor_request in tutor_requests %}
+            <tr>
+                <td>{{ tutor_request.timestamp }}</td>
+                <td><a href="{% url 'tutor:profile_public' tutor_request.user.id %}">{{ tutor_request.user }}</a></td>
+                <td>{{ tutor_request.subject }}</td>
+                <td>{{ tutor_request.notes }}</td>
+                {% if tutor_request.meeting %}
+                <td class="table-success">{{ tutor_request.meeting }}</td>
+                {% else %}
+                <td class="table-danger">{{ tutor_request.meeting }}</td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+{% if scheduled_meetings %}
+<div class='mb-4'>
+    <h2>Upcoming Meetings</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Student(s)</th>
+                <th>Tutor</th>
+                <th>Scheduled Start</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for meeting in scheduled_meetings %}
+            <tr>
+                <td>
+                    {% if meeting.students %}
+                    {{ meeting.students|join:", " }}
+                    {% else %}
+                    –
+                </td>
+                {% endif %}
+                <td>{{ meeting.tutors_str }}</td>
+                <td>{{ meeting.scheduled_start }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+{% if past_meetings %}
+<div class='mb-4'>
+    <h2>Past Meetings</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Student(s)</th>
+                <th>Tutor</th>
+                <th>Tutor Email</th>
+                <th>Scheduled Start</th>
+                <th>Start Time</th>
+                <th>Duration</th>
+                <th>Assessments</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for meeting in past_meetings %}
+            <tr>
+                <td>
+                    {% if meeting.students %}
+                    {{ meeting.students|join:", " }}
+                    {% else %}
+                    –
+                    {% endif %}
+                </td>
+                <td>{{ meeting.tutors_str }}</td>
+                <td>{{ meeting.tutor_emails }}</td>
+                <td>{{ meeting.scheduled_start }}</td>
+                <td>{{ meeting.start_datetime|default_if_none:"–" }}</td>
+                <td>{{ meeting.duration|default_if_none:"–" }}</td>
+                <td>{{ meeting.assessments|join:", " }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+{% if users %}
+<div class='mb-4'>
+    <h2>Students</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Meetings</th>
+                <th>Requests</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>
+                    <a href="{% url 'tutor:profile_public' user.id %}">{{ user.name }}</a>
+                </td>
+                {% if user.status == "No requests or meetings" %}
+                    <td class="table-light">{{ user.status }}</td>
+                    <td>–</td>
+                    <td>–</td>
+                {% elif user.status == "All requests fulfilled" %}
+                    <td class="table-success">{{ user.status }}</td>
+                    <td>
+                        {{ user.num_scheduled_meetings }} scheduled
+                          |  
+                        {{ user.num_past_meetings }} past
+                    </td>
+                    <td>{{ user.num_fulfilled_requests }} request{{ user.num_fulfilled_requests|pluralize }}</td>
+                {% elif user.status == "No meetings yet. Requests unfulfilled" %}
+                    <td class="table-danger">{{ user.status }}</td>
+                    <td>–</td>
+                    <td>{{ user.num_unfulfilled_requests }} unfulfilled</td>
+                {% elif user.status == "Attended meetings. Some requests unfulfilled" %}
+                    <td class="table-warning">{{ user.status }}</td>
+                    <td>
+                        {{ user.num_scheduled_meetings }} scheduled
+                          |  
+                        {{ user.num_past_meetings }} past
+                    </td>
+                    <td>{{ user.num_unfulfilled_requests }} unfulfilled</td>
+                {% else %}
+                    <td>{{ user.status }}</td>
+                {% endif %}
+
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+{% endif %}
+{% endblock %}

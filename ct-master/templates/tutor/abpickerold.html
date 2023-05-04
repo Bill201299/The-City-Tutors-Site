@@ -1,0 +1,22 @@
+<table style="width:100%">
+<tr>
+<th></th>
+{% for day in widget.days %}
+    <th>{{ day }}</th>
+{% endfor %}
+</tr>
+{% for hour in widget.hours %}
+    <tr>
+    <td><div style="display:inline-block">{{ hour }}</div></td>
+    {% for day in widget.days %}
+        <td><label>
+        <input
+            type="checkbox"
+            value={{forloop.counter0}},{{forloop.parentloop.counter0}}
+            name={{ widget.name }}
+        >
+        </label></td>
+    {% endfor %}
+    </tr>
+{% endfor %}
+</table>

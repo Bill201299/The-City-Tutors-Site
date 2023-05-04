@@ -1,0 +1,117 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<style>
+.rate {
+    height: 46px;
+    float: left;
+}
+.rate:not(:checked) > input {
+    position:absolute;
+    left:-9999px;
+}
+.rate:not(:checked) > label {
+    float: right;
+    width:1em;
+    overflow:hidden;
+    white-space:nowrap;
+    cursor:pointer;
+    font-size:50px;
+    color:#EBEBEB;
+}
+.rate:not(:checked) > label:before {
+    content: '★ ';
+}
+.rate > input:checked ~ label {
+    color: #ffc700;    
+}
+.rate:not(:checked) > label:hover,
+.rate:not(:checked) > label:hover ~ label {
+    color: #deb217;  
+}
+.rate > input:checked + label:hover,
+.rate > input:checked + label:hover ~ label,
+.rate > input:checked ~ label:hover,
+.rate > input:checked ~ label:hover ~ label,
+.rate > label:hover ~ input:checked ~ label {
+    color: #c59b08;
+}
+
+.custom_submit {
+    color: white;
+    background-color: #4f7493;
+    border-radius: 10px;
+    width: 200px;
+    height: 50px;
+    border-style: none;
+}
+
+.custom_submit:hover {
+    background-color: #07428b
+}
+
+.custom_submit:active{
+    transform: translateY(1px);
+}
+
+.custom_skip {
+    color: white;
+    background-color: #5a9757;
+    border-radius: 10px;
+    width: 100px;
+    height: 30px;
+    border-style: none;
+}
+
+.custom_skip:hover {
+    background-color: #3b5460
+}
+
+.custom_skip:active{
+    transform: translateY(1px);
+}
+</style>
+<br>
+<div style="border-style: solid; margin:auto; text-align: center; border-radius: 25px; padding: 5%;">
+    {% if role == "Tutor" %}
+        <h2>How did you feel the session went?</h2>
+    {% elif role == "Tutee"  %}
+        <h2>How Helpful was the Tutor?</h2>
+    {% endif %}
+    <div>{{ meeting }}</div>
+    <div>Subject: {{ meeting.subject }}</div>
+    <form method="post" class="mb-0">
+    {% csrf_token %}
+    <div style="display: inline-block;">
+        <div class="rate">
+            <input type="radio" id="star5-{{ forloop.counter }}" name="rate" value="5" required/>
+            <label for="star5-{{ forloop.counter }}" title="text">5 stars</label>
+            <input type="radio" id="star4-{{ forloop.counter }}" name="rate" value="4" />
+            <label for="star4-{{ forloop.counter }}" title="text">4 stars</label>
+            <input type="radio" id="star3-{{ forloop.counter }}" name="rate" value="3" />
+            <label for="star3-{{ forloop.counter }}" title="text">3 stars</label>
+            <input type="radio" id="star2-{{ forloop.counter }}" name="rate" value="2" />
+            <label for="star2-{{ forloop.counter }}" title="text">2 stars</label>
+            <input type="radio" id="star1-{{ forloop.counter }}" name="rate" value="1" />
+            <label for="star1-{{ forloop.counter }}" title="text">1 star</label>
+        </div>
+    </div>
+        <br><br><br>
+        <input type="hidden" name="meeting" value="{{ tutee.id }}">
+        <div>< Select Stars to Rate ></Select></div>
+        <br>
+        <input class="custom_submit" type="submit" name="rating" value="Submit">
+        <br><br>
+    </form>
+    <form method="POST">
+        {% csrf_token %}
+        {% if role == "Tutee" %}
+        <input class="custom_skip" type="submit" name="skip" value="Skip">
+        {% endif %}
+    </form>
+</div>
+
+{% endblock %}

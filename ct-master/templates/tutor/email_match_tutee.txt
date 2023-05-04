@@ -1,0 +1,4 @@
+Hi {{ tutee_name }},
+We have matched you with one of our tutors, {{ tutor_name }}, for tutoring in {{ subject }}!
+Please confirm your attendance within 48 hours and view session details at https://app.thecitytutors.org/request.
+The City Tutors

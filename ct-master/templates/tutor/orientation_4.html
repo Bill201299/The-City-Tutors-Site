@@ -1,0 +1,156 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<style>
+	.customnextbutton{
+	display: inline-block;
+	outline: 0;
+	border: none;
+	box-shadow: none;
+	cursor: pointer;
+	padding: 9px 22px;
+	font-size: 22px;
+	height: 50px;
+	font-weight: 400;
+	color: #fff;
+	text-align: center;
+	line-height: normal;
+	background: linear-gradient(90deg,purple 0,#CBC3E3 100%);
+	border-radius: 50px;
+	transition: color .2s ease,background-color .2s ease,box-shadow .2s ease;
+	}
+	.customnextbutton:not([disabled]):focus {
+		box-shadow: 0 0 .25rem rgba(0, 0, 0, 0.5), -.125rem -.125rem 1rem rgba(239, 71, 101, 0.5), .125rem .125rem 1rem rgba(255, 154, 90, 0.5);
+	}
+	.customnextbutton:not([disabled]):hover {
+		box-shadow: 0 0 .25rem rgba(0, 0, 0, 0.5), -.125rem -.125rem 1rem rgba(239, 71, 101, 0.5), .125rem .125rem 1rem rgba(255, 154, 90, 0.5);
+	}
+
+</style>
+
+<a href="{% url 'tutor:orientation-content' %}">
+  <button type="button" class="customnextbutton">back</button>
+</a>
+
+<br>
+<br>
+
+<h2>2. Ethics and Professionalism</h2>
+<iframe width="700" height="345" src="https://www.youtube.com/embed/Me8tFISmY5k"></iframe>
+<br>
+<br>
+
+<hr size="5" width="100%" color="black">  
+
+<p>
+  <b>You may fill out the questions below after you have completed the training.</b>
+</p>
+<form method="POST">
+	{% if not user.orientation4 %}
+		{% csrf_token %}
+		{% crispy form %}
+		<input class="customnextbutton" type='submit' name='submit' value='Submit'>
+
+	{% else %}
+		{{ form.question1.label }}
+		{% for choice in form.question1 %}
+			{% if forloop.counter0 in answer1 %}
+				<div class="select" style="color: green">{{ choice.tag }} {{ forloop.counter }}. {{ choice.choice_label }}</div>
+			{% else %}
+				<div class="select" style="color: red">{{ choice.tag }} {{ forloop.counter }}.  {{ choice.choice_label }}</div>
+			{% endif %}
+		{% endfor %}
+		<br>
+		<p>
+			You chose:
+			{% for answers in user.orientation4.question1 %}
+				{% if answers == '0' %}
+					{% if 0 in answer1 %}
+						<b style="color: green">1</b>
+					{% else %}
+						<b style="color: red">1</b>
+					{% endif %}
+				{% endif %}
+
+				{% if answers == '1' %}
+					{% if 1 in answer1 %}
+						<b style="color: green">2</b>
+					{% else %}
+						<b style="color: red">2</b>
+					{% endif %}
+				{% endif %}
+
+				{% if answers == '2' %}
+					{% if 2 in answer1 %}
+						<b style="color: green">3</b>
+					{% else %}
+						<b style="color: red">3</b>
+					{% endif %}
+				{% endif %}
+
+				{% if answers == '3' %}
+					{% if 3 in answer1 %}
+						<b style="color: green">4</b>
+					{% else %}
+						<b style="color: red">4</b>
+					{% endif %}
+				{% endif %}
+			{% endfor %}
+		</p>
+
+		<p style="padding: 10px; border: 2px solid black;">Explanation:
+			<br>
+			1) You do not need to explain to your tutee why you will be absent. It is more than sufficient to notify them in advance about your absence and reschedule the missed session for another date. <br>
+			2) We also want to be respectful of the tutee's time, and inform them of changes as soon as we know we can't make a session. Please let them know of any absences as much in advance as possible.g</p>
+
+		<p></p>
+
+    {{ form.question2.label }}
+    <br>
+    {% for choice in form.question2 %}
+      {% if forloop.counter0 == answer2 %}
+        <div class="select" style="color: green">{{ choice.tag }} {{ choice.choice_label }}</div>
+        {% if user.orientation4.question2 == answer2 %}
+          ✅ Correct
+        <br>
+        {% endif %}
+      {% elif forloop.counter0 == user.orientation4.question2 %}
+        <div class="select" style="color: red">{{ choice.tag }} {{ choice.choice_label }}</div>
+          ❌ Incorrect
+        <br>
+      {% elif forloop.counter0 != user.orientation4.question2 %}
+        <div class="select">{{ choice.tag }} {{ choice.choice_label }}</div>
+      
+      {% endif %}
+    {% endfor %}
+    <br>
+
+    <p style="padding: 10px; border: 2px solid black;">Explanation:
+      <br>
+      1) Study group sessions are usually formed when working with high school and college students on similar concepts. 
+			However, there may be times when groups are formed for different subjects. Students can be particularly nervious 
+			participating in group sessions, and we want to be respectful and encouraging to all students, while keeping them 
+			engaged with the material. <br>
+			2) If students tell you anything in confidence, then its expected that we should keep that confidence, unless 
+			you feel the student will be in danger by not sharing information. Always try to maintain a positive environment 
+			for all students, and offer constructive feedback when they encounter difficulties.</p>
+
+    <p></p>
+
+	{% endif %}
+	{% if user.orientation4 %}
+		<a href="{% url 'tutor:orientation-9' %}">
+			<button style="display: right; float: right;" type="button" class="customnextbutton">Next Training >>></button>
+	   	</a>
+	</div>
+
+	{% endif %}
+</form>
+<br>
+<br>
+<br>
+<br>
+{% endblock %}

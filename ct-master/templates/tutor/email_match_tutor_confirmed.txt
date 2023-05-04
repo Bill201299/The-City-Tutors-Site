@@ -1,0 +1,3 @@
+Hi {{ tutor_name }},
+The student has confirmed their attendance for their tutoring session in {{ subject }} on {{ scheduled_date }} Eastern. Please review session details at {{ status_link }}.
+The City Tutors

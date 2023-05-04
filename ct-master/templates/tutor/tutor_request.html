@@ -1,0 +1,56 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% block content %}
+<ul class="nav nav-tabs mb-3">
+  <li class="nav-item">
+    <a class='nav-link {% if page == "manage" %} active {% endif %}' aria-current="page" href="{% url 'tutor:request-manage' %}">Manage {% if num_active_requests %}<span class="badge rounded-pill bg-primary">{{ num_active_requests }}</span>{% endif %}</a>
+  </li>
+  <li class="nav-item">
+    <a class='nav-link {% if page == "request" %} active {% endif %}' aria-current="page" href="{% url 'tutor:request-new' %}">Request</a>
+  </li>
+</ul>
+{% if page == "request" %}
+    <h1>Request Tutoring</h1>
+    {% if tickets_due %}
+    <div class="alert alert-warning" role="alert">
+      You have an exit ticket to complete before making new requests
+      <a class="btn btn-sm btn-outline-primary" href="{% url 'tutor:exit-ticket' %}">Go to Exit Ticket</a>
+    </div>
+    {% else %}
+    <p>Hi, {{ name }}. Users can see your full name and your nickname. Click <a href="{% url 'tutor:profile' %}">here</a> to edit.</p>
+    <form method='post'>
+    {% csrf_token %}
+    {% crispy form %}
+    </form>
+    {% endif %}
+{% endif %}
+{% if page == "manage" %}
+  <h1>Manage Your Requests</h1>
+  <p>Hi, {{ name }}. Users can see your full name and your nickname. Click <a href="{% url 'tutor:profile' %}">here</a> to edit.</p>
+  {% if not request_forms %}
+    <div class="card my-2">
+      <div class='card-body'>
+        <h5 class='card-title'>You don't have any active requests</h5>
+        <p class='card-text'>Go to the "Request" tab to add some!</p>
+      </div>
+    </div>
+  {% else %}
+  <p>Matching occurs at 6pm Eastern daily. Check back after 6pm Eastern for updates.</p>
+  <p>Please note that all times are in Eastern Time. Last time you refreshed this page: <strong>{{ time|date:'m/d g:i a' }} Eastern</strong></p>
+    {% for request_form in request_forms %}
+        <div class="card my-2">
+          <div class="card-header">
+            Request {{ forloop.counter }}
+          </div>
+          <div class="card-body">
+            <form method='post' class="my-0">
+              {% csrf_token %}
+              {% crispy request_form %}
+            </form>
+          </div>
+        </div>
+    {% endfor %}
+  {% endif %}
+{% endif %}
+{% endblock %}

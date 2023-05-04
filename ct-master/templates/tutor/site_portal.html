@@ -1,0 +1,8 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% block content %}
+<ul>
+    <li>{% block site-log %}<a href="{% url 'tutor:site_log' %}">Log</a>{% endblock %}</li>
+    <li>{% block site-data %}<a href="{% url 'tutor:site_data' %}">Download Excel spreadsheet</a>{% endblock %}</li>
+</ul>
+{% endblock %}

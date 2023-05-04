@@ -1,0 +1,45 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<h1 class="mt-4 mb-4">Match Yourself with a Student</h1>
+
+<div class="accordion mb-5" id="requests-accordion">
+
+    {% for request in unfulfilled_requests %}
+    <div class="accordion-item">
+        <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#request-{{ request.id }}" aria-controls="request-{{ request.id }}">
+        Student {{ forloop.counter }}&emsp; {{ request.user.profile.sector.display }} - {{ request.subject.display }}
+        </button>
+        </h2>
+        <div id="request-{{ request.id }}" class="accordion-collapse collapse" data-bs-parent="#requests-accordion">
+            <div class="accordion-body">
+                <div class="mb-2">
+                    <h6>Request Timestamp</h6>
+                    <p>{{ request.timestamp }} ({{ request.timestamp|timesince:now }} ago)</p>
+                </div>
+
+                <div class="mb-2">
+                    <h6>Student Request Notes</h6>
+                    <p>{{ request.notes }}</p>
+                </div>
+
+                <h6>Time Availabilities</h6>
+                {% for timeslot in request.user.profile.available.all %}
+                <form method="post" class="mb-1">
+                    {% csrf_token %}
+                    <input type="hidden" name="request_id" value="{{ request.id }}">
+                    <input type="hidden" name="timeslot_id" value="{{ timeslot.id }}">
+                    <input type="submit" name="submit" value="{{ timeslot }}" style="width: 130px;" class="btn btn-outline-primary btn-sm">
+                </form>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+
+{% endblock %}

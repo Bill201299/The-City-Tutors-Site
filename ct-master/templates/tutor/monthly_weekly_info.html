@@ -1,0 +1,40 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<h1>Volunteer Types</h1>
+<p>
+    The City Tutors has two types of tutoring volunteers: weekly and monthly. You can switch from one to another and edit the number of hours you can volunteer at any time and as many times as you would like!
+</p>
+
+<h3>Weekly Volunteer</h3>
+<p>
+    If you select <strong>weekly volunteer</strong>, you can increase or decrease your hours on a weekly basis. You will need to change your hours to 0 to stop being matched. This will work for you if you want to have the ability to make changes to your offered hours every week and be more flexible.
+</p>
+
+<div class="alert alert-primary" role="alert">
+    <h6>Sample Input</h6>
+    <p>Hours offered weekly: 3</p>
+</div>
+
+<hr>
+
+<h3>Monthly Volunteer</h3>
+<p>
+    If you select <strong>monthly volunteer</strong>, you can schedule your volunteering hours for future months. We will automatically stop matching you in months where your hours are set to 0.
+</p>
+<p>
+    For example, if you plan to tutor 10 hours next month, but will be unavailable the month after, you can tell us in advance. This option will work for you if you would like to avoid the hassle of adjusting your hours every week to fit your availability.
+</p>
+
+<div class="alert alert-primary" role="alert">
+    <h6>Sample Input</h6>
+    <p>Hours offered this month: 8</p>
+    <p>Hours offered next month: 10</p>
+    <p>Hours offered 2 months from now: 0</p>
+    <p>Hours offered 3 months from now: 10</p>
+</div>
+
+
+{% endblock %}

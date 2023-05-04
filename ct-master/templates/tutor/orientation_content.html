@@ -1,0 +1,221 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% block content %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $("#button1").click(function(){
+            $("#ul1").slideToggle();
+            $(this).text(function(i, text){
+                return text === "Required Orientation Sections -" ? "Required Orientation Sections +": "Required Orientation Sections -";
+            })
+        });
+    });
+    $(document).ready(function(){
+        $("#button2").click(function(){
+            $("#ul2").slideToggle();
+            $(this).text(function(i, text){
+                return text === "Optional Orientation Sections -" ? "Optional Orientation Sections +": "Optional Orientation Sections -";
+            })
+        });
+    });
+    $(document).ready(function(){
+        $("#volunteer").click(function(){
+            $("#ul3").slideToggle();
+        });
+    });
+</script>
+
+<style>
+.main-menu:link{
+    color:black;
+    text-decoration: none;
+}
+
+.main-menu:visited{
+    color: black;
+    text-decoration: none;
+}
+
+.main-menu:hover{
+    color:gray;
+}
+
+.purple-outline{
+    background: #532c8c;
+    color: white;
+    width: 100%;
+    font-size: 25px;
+    text-align: left;
+}
+
+.submitted{
+    color: green;
+    font-size: 15px;
+}
+
+.list:visited{
+    color:black;
+    text-decoration: none;
+    border-bottom:1px solid red;
+}
+
+.list:link{
+    color:black;
+    text-decoration: none;
+    border-bottom:1px solid red;
+    font-size: 20px;
+}
+
+.list:hover{
+    color:gray;
+}
+
+button.volunteer{
+    background: none;
+    border: none;
+    color:black;
+    text-decoration: none;
+    font-size: 20px;
+    border-bottom: 1px solid red;
+}
+
+</style>
+<p>
+    <h2>Orientation Training</h2>
+    &emsp; <a class = main-menu href="{% url 'tutor:orientation' %}">&#8592 <b style="border-bottom:1px solid red;">MAIN PAGE | Onboarding</b></a>
+    <br>
+    <hr>
+</p>
+<p>Welcome to the Orientation Training provided by The City Tutors! This orientation is comprised of the following mandatory videos and quizzes. 
+    It will cover important information on tutor eligibility, fundamentals, application usage, and ethics.
+    This orientation will take approximately 45 minutes to complete.
+</p>
+<p>You must finish the orientation completely before you can begin tutoring with The City Tutors.</p>
+<ul>
+    <ul><b>Training Module 1: The City Tutors Web App</b> (4min 30sec)</ul> 
+    <ul><b>Training Module 2: Ethics and Professionalism</b> (4min 30sec)</ul>
+    <ul><b>Training Module 3: Communication with a student</b> (5min)</ul>
+    <ul><b>Training Module 4: Representative problem exercise</b> (8min)</ul>
+</ul>
+
+<button id="button1" class="purple-outline">Required Orientation Sections +</button>
+
+
+<ul id="ul1" style="display: none;">
+    <br>
+
+    {% if not user.orientation3 %}
+        <div style="font-size: 15px;">&#9633; <b>REQUIRED</b></div>
+    {% else %}
+        <div class="submitted" style="font-size: 15px;">&#x2713; SUBMITTED</div>
+    {% endif %}
+    <ul><p><a class="list" href="{% url 'tutor:orientation-3' %}">1. The City Tutors Web App</a></p></ul>
+
+    {% if not user.orientation4 %}
+        <div style="font-size: 15px;">&#9633; <b>REQUIRED</b></div>
+    {% else %}
+        <div class="submitted" style="font-size: 15px;">&#x2713; SUBMITTED</div>
+    {% endif %}
+    <ul><p><a class="list" href="{% url 'tutor:orientation-4' %}">2. Ethics and Professionalism</a></p></ul>
+
+    {% if not user.orientation9 %}
+        <div style="font-size: 15px;">&#9633; <b>REQUIRED</b></div>
+    {% else %}
+        <div class="submitted" style="font-size: 15px;">&#x2713; SUBMITTED</div>
+    {% endif %}
+    <ul><p><a class="list" href="{% url 'tutor:orientation-9' %}">3. Communication with The Student</a></p></ul>
+
+    {% if not user.orientation11 %}
+        <div style="font-size: 15px;">&#9633; <b>REQUIRED</b></div>
+    {% else %}
+        <div class="submitted" style="font-size: 15px;">&#x2713; SUBMITTED</div>
+    {% endif %}
+    <ul><a class="list" href="{% url 'tutor:orientation-11' %}">4. Representative Problem Exercise</a></ul>
+
+</ul>
+<br>
+<br>
+
+<button id="button2" class="purple-outline">Optional Orientation Sections +</button>
+<ul id="ul2" style="display: none;">
+    <br>
+    {% if not user.orientation1 %}
+        <div style="font-size: 15px;">&#9633; <b>UNSUBMITTED</b></div>
+        <ul><a id="volunteer" class="list" onclick="return false" href="{% url 'tutor:orientation-1c' %}">5.  The Volunteer Journey (Choose your occupation)</a></ul>
+
+
+        <ul id="ul3" style="display: none;">
+            <ul><a class="list" href="{% url 'tutor:orientation-1c' %}">&#x2022; College Students</button></a></ul>
+            <ul><a class="list" href="{% url 'tutor:orientation-1h' %}">&#x2022; High School Students</button></a></ul>
+            <ul><a class="list" href="{% url 'tutor:orientation-1w' %}">&#x2022; Working Professionals</button></a></ul>
+            <ul><a class="list" href="{% url 'tutor:orientation-1r' %}">&#x2022; Retired Professionals</button></a></ul>
+            
+        </ul>
+        <br>
+
+    {% elif user.orientation1.occupation == 0 %}
+        <div class="submitted" style="font-size: 15px;">&#x2713; SUBMITTED</div>
+        <ul><p><a class="list" href="{% url 'tutor:orientation-1c' %}">5. The Volunteer Journey</a></p></ul>
+    {% elif user.orientation1.occupation == 1 %}
+        <div class="submitted" style="font-size: 15px;">&#x2713; SUBMITTED</div>
+        <ul><p><a class="list" href="{% url 'tutor:orientation-1h' %}">5. The Volunteer Journey</a></p></ul>
+    {% elif user.orientation1.occupation == 2 %}
+        <div class="submitted" style="font-size: 15px;">&#x2713; SUBMITTED</div>
+        <ul><p><a class="list" href="{% url 'tutor:orientation-1w' %}">5. The Volunteer Journey</a></p></ul>
+    {% elif user.orientation1.occupation == 3 %}
+        <div class="submitted" style="font-size: 15px;">&#x2713; SUBMITTED</div>
+        <ul><p><a class="list" href="{% url 'tutor:orientation-1r' %}">5. The Volunteer Journey</a></p></ul>
+    {% endif %}
+    {% if not user.orientation2 %}
+        <div style="font-size: 15px;">&#9633; <b>UNSUBMITTED</b></div>
+    {% else %}
+        <div class="submitted" style="font-size: 15px;">&#x2713; SUBMITTED</div>
+    {% endif %}
+    <ul><p><a class="list" href="{% url 'tutor:orientation-2' %}">6. The City Tutors Organization</a></p></ul>
+
+    {% if not user.orientation5 %}
+        <div style="font-size: 15px;">&#9633; <b>UNSUBMITTED</b></div>
+    {% else %}
+        <div class="submitted" style="font-size: 15px;">&#x2713; SUBMITTED</div>
+    {% endif %}
+    <ul><p><a class="list" href="{% url 'tutor:orientation-5' %}">7. The Role of the Tutor</a></p></ul>
+
+    {% if not user.orientation6 %}
+        <div style="font-size: 15px;">&#9633; <b>UNSUBMITTED</b></div>
+    {% else %}
+        <div class="submitted" style="font-size: 15px;">&#x2713; SUBMITTED</div>
+    {% endif %}
+    <ul><p><a class="list" href="{% url 'tutor:orientation-6' %}">8. The Minimalist Tutoring Philosophy</a></p></ul>
+
+    {% if not user.orientation7 %}
+    <div style="font-size: 15px;">&#9633; <b>UNSUBMITTED</b></div>
+    {% else %}
+        <div class="submitted" style="font-size: 15px;">&#x2713; SUBMITTED</div>
+    {% endif %}
+    <ul><p><a class="list" href="{% url 'tutor:orientation-7' %}">9. The Online Tutoring Environment</a></p></ul>
+
+    {% if not user.orientation8 %}
+        <div style="font-size: 15px;">&#9633; <b>UNSUBMITTED</b></div>
+    {% else %}
+        <div class="submitted" style="font-size: 15px;">&#x2713; SUBMITTED</div>
+    {% endif %}
+    <ul><p><a class="list" href="{% url 'tutor:orientation-8' %}">10. The Beginning of the Session</a></p></ul>
+
+    {% if not user.orientation10 %}
+        <div style="font-size: 15px;">&#9633; <b>UNSUBMITTED</b></div>
+    {% else %}
+        <div class="submitted" style="font-size: 15px;">&#x2713; SUBMITTED</div>
+    {% endif %}
+    <ul><a class="list" href="{% url 'tutor:orientation-10' %}">11. The End of the Session</a></ul>
+
+</ul>
+<br>
+<br>
+<br>
+<br>
+<div style="background: white; height: 200px;">
+</div>
+
+{% endblock %}

@@ -1,0 +1,5 @@
+Hello,
+Your meeting has been cancelled because you did not confirm your attendance.
+Please check https://app.thecitytutors.org/request to view and create requests.
+Sincerely,
+The City Tutors

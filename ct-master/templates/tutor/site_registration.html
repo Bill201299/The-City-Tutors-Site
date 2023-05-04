@@ -1,0 +1,14 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<h1>Site Account Registration</h1>
+<p>If you are a Program Coordinator at one of our partner sites, please create an account using the form below.</p>
+<p>If you have a designated site office location, please select it in the "Site Location" selector. Otherwise, leave blank.</p>
+
+<form method='post'>
+{% csrf_token %}
+    {% crispy form %}
+</form>
+{% endblock %}

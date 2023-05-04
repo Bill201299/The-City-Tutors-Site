@@ -1,0 +1,47 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<h2 class='my-4'>Hours Forecast</h2>
+
+<h3>Summary</h3>
+<table class="table">
+    <tbody>
+
+        {% for month, hours in offered_monthly.items %}
+        <tr>
+            <td>{{ month }}</td>
+            <td>{{ hours }} hours</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="my-5">
+    <h4>October</h4>
+    {% if this_month %}
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <th>Tutor</th>
+                <th>Hours</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for offering in this_month %}
+            <tr>
+                <td>{{ offering.user }}</td>
+                <td></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No tutors</p>
+    {% endif %}
+</div>
+
+
+
+{% endblock %}

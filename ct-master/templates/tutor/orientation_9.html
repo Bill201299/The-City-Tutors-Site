@@ -1,0 +1,205 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<style>
+	.customnextbutton{
+	display: inline-block;
+	outline: 0;
+	border: none;
+	box-shadow: none;
+	cursor: pointer;
+	padding: 9px 22px;
+	font-size: 22px;
+	height: 50px;
+	font-weight: 400;
+	color: #fff;
+	text-align: center;
+	line-height: normal;
+	background: linear-gradient(90deg,purple 0,#CBC3E3 100%);
+	border-radius: 50px;
+	transition: color .2s ease,background-color .2s ease,box-shadow .2s ease;
+	}
+	.customnextbutton:not([disabled]):focus {
+		box-shadow: 0 0 .25rem rgba(0, 0, 0, 0.5), -.125rem -.125rem 1rem rgba(239, 71, 101, 0.5), .125rem .125rem 1rem rgba(255, 154, 90, 0.5);
+	}
+	.customnextbutton:not([disabled]):hover {
+		box-shadow: 0 0 .25rem rgba(0, 0, 0, 0.5), -.125rem -.125rem 1rem rgba(239, 71, 101, 0.5), .125rem .125rem 1rem rgba(255, 154, 90, 0.5);
+	}
+
+</style>
+
+<a href="{% url 'tutor:orientation-content' %}">
+  <button type="button" class="customnextbutton">back</button>
+</a>
+
+<br>
+<br>
+
+<h2>3. Communication with The Student</h2>
+<iframe width="700" height="345" src="https://www.youtube.com/embed/3SL4BH_5gZ8"></iframe>
+<br>
+<br>
+
+<hr size="5" width="100%" color="black">  
+
+<p>
+  <b>You may fill out the questions below after you have completed the training.</b>
+</p>
+<form method="POST">
+	{% if not user.orientation9 %}
+		{% csrf_token %}
+		{% crispy form %}
+		<input class="customnextbutton" type='submit' name='submit' value='Submit'>
+
+	{% else %}
+		{{ form.question1.label }}
+		{% for choice in form.question1 %}
+			{% if forloop.counter0 in answer1 %}
+				<div class="select" style="color: green">{{ choice.tag }} {{ forloop.counter }}. {{ choice.choice_label }}</div>
+			{% else %}
+				<div class="select" style="color: red">{{ choice.tag }} {{ forloop.counter }}.  {{ choice.choice_label }}</div>
+			{% endif %}
+		{% endfor %}
+		<br>
+		<p>
+			You chose:
+			{% for answers in user.orientation9.question1 %}
+				{% if answers == '0' %}
+					{% if 0 in answer1 %}
+						<b style="color: green">1</b>
+					{% else %}
+						<b style="color: red">1</b>
+					{% endif %}
+				{% endif %}
+
+				{% if answers == '1' %}
+					{% if 1 in answer1 %}
+						<b style="color: green">2</b>
+					{% else %}
+						<b style="color: red">2</b>
+					{% endif %}
+				{% endif %}
+
+				{% if answers == '2' %}
+					{% if 2 in answer1 %}
+						<b style="color: green">3</b>
+					{% else %}
+						<b style="color: red">3</b>
+					{% endif %}
+				{% endif %}
+
+				{% if answers == '3' %}
+					{% if 3 in answer1 %}
+						<b style="color: green">4</b>
+					{% else %}
+						<b style="color: red">4</b>
+					{% endif %}
+				{% endif %}
+
+				{% if answers == '4' %}
+					{% if 4 in answer1 %}
+						<b style="color: green">5</b>
+					{% else %}
+						<b style="color: red">5</b>
+					{% endif %}
+				{% endif %}
+			{% endfor %}
+		</p>
+
+		<p style="padding: 10px; border: 2px solid black;">Explanation:
+			<br>
+			1) Whether we are working with the student online or in-person, its important that the student(s) in the session know that we are focused on them and what they need help with. This start with body language an attire. There is no dresscode to volunteer with The City Tutors, and wearing a business suit may create a power dynamic in the session. Conversely, wearing anything inappropriate may make the student uncomfortable working with the the tutor. <br><br>
+			2) For online tutoring, its important that the video camera is on so that the student can see the tutor. Its okay, if the background is blurred, or the tutor. Its also important to havea solid internet connection to reduce disruptions to the session on the tutor's side. Its also okay if you need to mute yourself a certain points. <br><br>
+			3) For In-person tutoring, we want to try to create a peer relationship, and that comes from sitting adjacent to the student rather than across a table. There can be some exceptions to this, though, as some cultures only allow people to sit next to each other if they are the same gender. <br><br>
+			4) For body language, its important that they see the tutor is focused on them. So, facing them, maintaining eye contact, and focused on the work. Language such as folded arms can create a power dynamic. Looking elsewhere or at the phone may also lead the student to not be focused as they feel the tutor isn't focused on them. 
+		</p>
+
+		<p></p>
+
+    {{ form.question2.label }}
+    {% for choice in form.question2 %}
+      {% if forloop.counter0 in answer2 %}
+        <div class="select" style="color: green">{{ choice.tag }} {{ forloop.counter }}. {{ choice.choice_label }}</div>
+      {% else %}
+        <div class="select" style="color: red">{{ choice.tag }} {{ forloop.counter }}.  {{ choice.choice_label }}</div>
+      {% endif %}
+    {% endfor %}
+
+    <br>
+    <p>
+			You chose:
+			{% for answers in user.orientation9.question2 %}
+				{% if answers == '0' %}
+					{% if 0 in answer2 %}
+						<b style="color: green">1</b>
+					{% else %}
+						<b style="color: red">1</b>
+					{% endif %}
+				{% endif %}
+
+				{% if answers == '1' %}
+					{% if 1 in answer2 %}
+						<b style="color: green">2</b>
+					{% else %}
+						<b style="color: red">2</b>
+					{% endif %}
+				{% endif %}
+				{% if answers == '2' %}
+					{% if 2 in answer2 %}
+						<b style="color: green">3</b>
+					{% else %}
+						<b style="color: red">3</b>
+					{% endif %}
+				{% endif %}
+
+				{% if answers == '3' %}
+					{% if 3 in answer2 %}
+						<b style="color: green">4</b>
+					{% else %}
+						<b style="color: red">4</b>
+					{% endif %}
+				{% endif %}
+		
+				{% if answers == '4' %}
+					{% if 4 in answer2 %}
+						<b style="color: green">5</b>
+					{% else %}
+						<b style="color: red">5</b>
+					{% endif %}
+				{% endif %}
+
+				{% if answers == '5' %}
+					{% if 5 in answer2 %}
+						<b style="color: green">6</b>
+					{% else %}
+						<b style="color: red">6</b>
+					{% endif %}
+				{% endif %}
+			{% endfor %}
+  	</p>
+  
+		<p style="padding: 10px; border: 2px solid black;">Explanation:
+			<br>
+			1) Within the tutorial session, its important for tutors to use language that's constructive and encouraging. Students may not feel or receive information the same way tutors do, so its important to consider how we approach them in different scenarios. Obviously, we don't want to be stigmatizing to them, but we also don't want to dismiss their concerns or be overly critical of them. <br><br>
+			2) When giving constructive commentary, its important to not be critical, as students may not have developed how to receive critical feedback. Instead, probing questions can be used to have them clarify a point that is mistaken, or to guide them to understanding what can be improved. <br><br>
+			3) If students aren't motivated, or even discouraged with the material, a tutor takes on more of an academic coach role. They can reframe the material into a context that better suits the student's future interests, and to be encouraging when the student feels that they aren't a going to succeed with the material. <br><br>
+			4) Ultimately, our goal is enrichment support for the student. Whatever level their understanding with the material is, we can be there for them to help them to get to the next stage in their learning.
+		</p>
+
+		<p></p>
+
+	{% endif %}
+	{% if user.orientation9 %}
+	<a href="{% url 'tutor:orientation-11' %}">
+    	<button style="display: right; float: right;" type="button" class="customnextbutton">Next Training >>></button>
+  	</a>
+	{% endif %}
+</form>
+<br>
+<br>
+<br>
+<br>
+{% endblock %}

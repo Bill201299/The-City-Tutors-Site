@@ -1,0 +1,15 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% block content %}
+{% if request.user.profile.onboarded %}
+You have already completed onboarding.
+{% else %}
+<h1>Onboarding for {{ sector }} Tutoring</h1>
+<form method='post'>
+{% csrf_token %}
+    {% crispy form %}
+</form>
+{% endif %}
+{% endblock %}
+

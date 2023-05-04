@@ -1,0 +1,66 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+{% if grade_level_form %}
+<h4 class="mt-4">Please tell us the student's grade level.</h4>
+<form method="post" class="my-4">
+{% csrf_token %}
+    {% crispy grade_level_form %}
+</form>
+
+{% else %}
+
+<div class="mb-4">
+<h1 class="my-4">Exit Ticket for Session{{ meetings|pluralize }} with {{ tutor }}</h1>
+<p>
+    Please complete a questionnaire about your session{{ meetings|pluralize }} with {{ tutor }} below. <br>
+    Note: You will not be able to make another request until this is submitted.
+</p>
+</div>
+
+<div class="mb-4">
+    <h4>Your Request</h4>
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Subject</th>
+                <td>{{ tutor_request.subject }}</td>
+            </tr>
+            <tr>
+                <th>Notes</th>
+                <td>{{ tutor_request.notes }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="mb-4">
+    <h4>Session{{ meetings|pluralize }}</h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Start Time</th>
+                <th>Tutor Notes</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for meeting in meetings %}
+            <tr>
+                <td>{{ meeting.start_datetime }}</td>
+                <td>{{ meeting.notes }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<form method="post" class="my-4">
+{% csrf_token %}
+    {% crispy form %}
+</form>
+
+{% endif %}
+{% endblock %}

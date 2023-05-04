@@ -1,0 +1,11 @@
+{% extends "base/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<h1>General Issue</h1>
+<form method='post'>
+    {% csrf_token %}
+    {% crispy general_issue_form %}
+</form>
+{% endblock %}
+
+

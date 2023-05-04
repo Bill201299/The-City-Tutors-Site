@@ -1,0 +1,17 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% block content %}
+<h2>Writing Tutor Questionnaire</h2>
+{% if not completed %}
+    <form method='post'>
+    {% csrf_token %}
+        {% for form in forms %}
+            {% crispy form %}
+        {% endfor %}
+        <input type='submit' name='submit' value='Submit'>
+    </form>
+{% else %}
+<p>Your response has been saved</p>
+{% endif %}
+{% endblock %}

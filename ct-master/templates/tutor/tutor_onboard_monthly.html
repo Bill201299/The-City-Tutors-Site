@@ -1,0 +1,17 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<h1>Monthly Tutoring Hours</h1>
+
+<form method='POST'>
+    {% csrf_token %}
+    {{ form_current.as_p }}
+    {{ form.as_p }}
+
+    <input type="submit" name="submit" value="Submit" class='btn-primary btn'>
+</form>
+
+{% endblock %}

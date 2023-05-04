@@ -1,0 +1,9 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% block content %}
+<ul style="list-style-type:none" class="list-group">
+    <li><a class="list-group-item" href="{% url 'tutor:clock' %}">Clock</a></li>
+    <li><a class="list-group-item" href="{% url 'tutor:manage' %}">Manage</a></li>
+</ul>
+{% endblock %}
+

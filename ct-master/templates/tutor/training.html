@@ -1,0 +1,11 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% block content %}
+<ul>
+    <li>{% block training_0 %}<a href="{% url 'tutor:orientation_questionnaire' %}">Orientation</a>{% endblock %}</li>
+    <li>{% block training_1 %}<a href="{% url 'tutor:training_questionnaire_1' %}">Training 1</a>{% endblock %}</li>
+    <li>{% block training_2 %}<a href="{% url 'tutor:training_questionnaire_2' %}">Training 2</a>{% endblock %}</li>
+</ul>
+{% endblock %}
+
+

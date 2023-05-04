@@ -1,0 +1,14 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% block content %}
+{% if request.user.is_authenticated %}
+You are already registered and signed in as <b>{{ request.user.username }}</b>
+{% else %}
+<h1>Register to be a Volunteer Tutor</h1>
+<form method='post'>
+{% csrf_token %}
+    {% crispy form %}
+</form>
+{% endif %}
+{% endblock %}

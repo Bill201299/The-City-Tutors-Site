@@ -1,0 +1,29 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% block content %}
+<h1>Tutee Waitlist</h1>
+<table class='table'>
+  <thead>
+    <tr>
+      <th>Student Name</th>
+      <th>Site</th>
+      <th>Subjects</th>
+      <th>Outstanding Hours</th>
+      <th>Sector</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for user in users %}
+    <tr>
+      <td>{{ user.profile.full_name|default:user.username }}</td>
+      <td>{{ user.profile.site }}</td>
+      <td>{{ user.profile.requested_subjects.all|join:" | " }} </td>
+      <td>{{ user.outstanding_hours }}</td>
+      <td>{{ user.profile.sector }}</td>
+      <td><a href="{% url 'tutor:match_tutee' user.username %}">Match</a></td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

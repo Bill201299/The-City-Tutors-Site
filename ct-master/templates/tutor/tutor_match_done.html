@@ -1,0 +1,9 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<h1>Meeting Has Been Scheduled</h1>
+<p>Thank you for your support! We will send you a notification once the student confirms their attendance. Please check your <a href="{% url 'tutor:manage' %}">Meetings Page</a> to view meeting details.</p>
+<p>Note: SMS notifications are currently unavailable. We are sorry for the inconvenience.</p>
+{% endblock %}

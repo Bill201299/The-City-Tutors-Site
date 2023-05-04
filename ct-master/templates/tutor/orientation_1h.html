@@ -1,0 +1,121 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<style>
+  .customnextbutton{
+  display: inline-block;
+  outline: 0;
+  border: none;
+  box-shadow: none;
+  cursor: pointer;
+  padding: 9px 22px;
+  font-size: 22px;
+  height: 50px;
+  font-weight: 400;
+  color: #fff;
+  text-align: center;
+  line-height: normal;
+  background: linear-gradient(90deg,purple 0,#CBC3E3 100%);
+  border-radius: 50px;
+  transition: color .2s ease,background-color .2s ease,box-shadow .2s ease;
+  }
+	.customnextbutton:not([disabled]):focus {
+		box-shadow: 0 0 .25rem rgba(0, 0, 0, 0.5), -.125rem -.125rem 1rem rgba(239, 71, 101, 0.5), .125rem .125rem 1rem rgba(255, 154, 90, 0.5);
+	}
+	.customnextbutton:not([disabled]):hover {
+		box-shadow: 0 0 .25rem rgba(0, 0, 0, 0.5), -.125rem -.125rem 1rem rgba(239, 71, 101, 0.5), .125rem .125rem 1rem rgba(255, 154, 90, 0.5);
+	}
+
+</style>
+
+<a href="{% url 'tutor:orientation-content' %}">
+  <button type="button" class="customnextbutton">back</button>
+</a>
+
+<br>
+<br>
+<h2>5. Volunteer Journey (High School Students)</h2>
+<iframe title="College Students" width="700" height="345" src="https://youtube.com/embed/YRzrLy0C4uU"></iframe>
+
+<br>
+<br>
+
+<hr size="5" width="100%" color="black">  
+
+<p>
+  <b>You may fill out the questions below after you have completed the training.</b>
+</p>
+
+<form method="POST">
+    {% if not user.orientation1 %}
+    {% csrf_token %}
+    {% crispy form %}
+    <input class="customnextbutton" type='submit' name='submit' value='Submit'>
+    {% else %}
+    {{ form.question1.label }}
+    <br>
+    {% for choice in form.question1 %}
+    
+    {% if forloop.counter0 == answer1 %}
+    <div class="select" style="color: green">{{ choice.tag }} {{ choice.choice_label }}</div>
+    {% if user.orientation1.question1 == answer1 %}
+    ✅ Correct
+    <br>
+    {% endif %}
+    {% elif forloop.counter0 == user.orientation1.question1 %}
+    <div class="select" style="color: red">{{ choice.tag }} {{ choice.choice_label }}</div>
+    ❌ Incorrect
+    <br>
+    {% elif forloop.counter0 != user.orientation1.question1 %}
+    <div class="select">{{ choice.tag }} {{ choice.choice_label }}</div>
+    
+    {% endif %}
+    {% endfor %}
+    <br>
+
+    <p style="padding: 10px; border: 2px solid black;">Explanation: The live training is only available after all of the training modules have been completed. 
+        It offers an opportunity to review concepts that you have questions on within the modules, as well as 
+        to review background check procedure and give feedback on your tutoring before you work with a student.</p>
+
+    <p></p>
+
+    {{ form.question2.label }}
+    {% for choice in form.question2 %}
+    {% if forloop.counter0 == answer2 %}
+    <div class="select" style="color: green">{{ choice.tag }} {{ choice.choice_label }}</div>
+    {% if user.orientation1.question2 == answer2 %}
+    ✅ Correct
+    <br>
+    {% endif %}
+    {% elif forloop.counter0 == user.orientation1.question2 %}
+    <div class="select" style="color: red">{{ choice.tag }} {{ choice.choice_label }}</div>
+    ❌ Incorrect
+    <br>
+    {% elif forloop.counter0 != user.orientation1.question2 %}
+    <div class="select">{{ choice.tag }} {{ choice.choice_label }}</div>
+    
+    {% endif %}
+    {% endfor %}
+    <br>
+    <p style="padding: 10px; border: 2px solid black;">Explanation: As a High School student, you dont need to go through the BackgroundInfoUSA online database check. 
+        We will still need a transcript/report card, a letter of reference from an adult who is not a family member, and letter of parental consent (https://bit.ly/3JTU5rd)</p>
+
+    <p></p>
+    {% endif %}
+
+{% if user.orientation1 %}
+<a href="{% url 'tutor:orientation-2' %}">
+  <button style="background-color:blue; display: right; float: right;" type="button" class="customnextbutton">Next Training >>></button>
+</a>
+{% endif %}
+</form>
+<br>
+<br>
+<br>
+<br>
+
+
+{% endblock %}

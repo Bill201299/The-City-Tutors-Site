@@ -1,0 +1,93 @@
+{% extends "admin/base.html" %}
+
+{% block content_title %}
+    <h1 xmlns="http://www.w3.org/1999/html"> Dashboard </h1>
+
+    <a class="btn btn-primary btn-sm my-2" href="{% url 'tutor:database_download' %}" role="button">Download Data</a>
+    | Jump to
+    <a href="#Tutors">Tutors</a>
+    | Jump to
+    <a href="#Students">Students</a>
+
+    <div class="results">
+    {% block tutor_list %}
+      <h2 id= "Tutors">Tutor Information -  {{ tutor_total }} Tutors Total</h2>
+      </table>
+      <table>
+        <thead>
+          <tr>
+            <th>
+              <div class="text">
+                <a href="#">Full Name</a>
+              </div>
+            </th>
+            <th>
+              <div class="text">
+                <a href="#">Email</a>
+              </div>
+            </th>
+            <th>
+              <div class="text">
+                <a href="#">Phone</a>
+              </div>
+            </th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for row in tutors %}
+          <tr class="{% cycle 'row1' 'row2' %}">
+            <td> {{ row.full_name}} </td>
+            <td> {{ row.user__email }} </td>
+            <td> {{ row.phone_number }} </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% endblock %}
+    <br>
+    {% block student_list %}
+      <h2 id= "Students"> Student Information -  {{ student_total }} Students Total </h2>
+      <table>
+        <thead>
+          <tr>
+            <th>
+              <div class="text">
+                <a href="#">Full Name</a>
+              </div>
+            </th>
+            <th>
+              <div class="text">
+                <a href="#">Email</a>
+              </div>
+            </th>
+            <th>
+              <div class="text">
+                <a href="#">Phone</a>
+              </div>
+            </th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for row in students %}
+          <tr class="{% cycle 'row1' 'row2' %}">
+            <td> {{ row.full_name}} </td>
+            <td> {{ row.user__email }} </td>
+            <td> {{ row.phone_number }} </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% endblock %}
+
+
+
+
+
+    </div>
+{% endblock %}
+
+
+
+{% block pagination %}{% endblock %}

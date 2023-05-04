@@ -1,0 +1,25 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% block content %}
+<h2>Tutor Training</h2>
+{% if not request.user.tutortraining %}
+<p>
+This training questionnaire is meant to be completed after training
+with an instructor.  Please create a Calendly appointment with an
+instructor at one of the links below:
+</p>
+<ul>
+    <li><a href="https://calendly.com/amnatahir1996/amna-s-training-sessions">Amna</a></li>
+    <li><a href="https://calendly.com/gabrieldailey1">Gabriel</a></li>
+    <li><a href="https://calendly.com/scrystalgarcia/training-session-1">Crystal</a></li>
+</ul>
+<p>You may fill out the questions below after you have completed the training.</p>
+<form method='post'>
+{% csrf_token %}
+    {% crispy form %}
+</form>
+{% else %}
+<p>Your response has been saved</p>
+{% endif %}
+{% endblock %}

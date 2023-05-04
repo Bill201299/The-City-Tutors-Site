@@ -1,0 +1,163 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<style>
+	.customnextbutton{
+	display: inline-block;
+	outline: 0;
+	border: none;
+	box-shadow: none;
+	cursor: pointer;
+	padding: 9px 22px;
+	font-size: 22px;
+	height: 50px;
+	font-weight: 400;
+	color: #fff;
+	text-align: center;
+	line-height: normal;
+	background: linear-gradient(90deg,purple 0,#CBC3E3 100%);
+	border-radius: 50px;
+	transition: color .2s ease,background-color .2s ease,box-shadow .2s ease;
+	}
+	.customnextbutton:not([disabled]):focus {
+		box-shadow: 0 0 .25rem rgba(0, 0, 0, 0.5), -.125rem -.125rem 1rem rgba(239, 71, 101, 0.5), .125rem .125rem 1rem rgba(255, 154, 90, 0.5);
+	}
+	.customnextbutton:not([disabled]):hover {
+		box-shadow: 0 0 .25rem rgba(0, 0, 0, 0.5), -.125rem -.125rem 1rem rgba(239, 71, 101, 0.5), .125rem .125rem 1rem rgba(255, 154, 90, 0.5);
+	}
+
+</style>
+
+<a href="{% url 'tutor:orientation-content' %}">
+  <button type="button" class="customnextbutton">back</button>
+</a>
+
+<br>
+<br>
+
+<h2>7. The Role of the Tutor</h2>
+<iframe width="700" height="345" src="https://www.youtube.com/embed/M_5DHQ1j6Ik"></iframe>
+<br>
+<br>
+
+<hr size="5" width="100%" color="black">  
+
+<p>
+  <b>You may fill out the questions below after you have completed the training.</b>
+</p>
+<form method="POST">
+	{% if not user.orientation5 %}
+		{% csrf_token %}
+		{% crispy form %}
+		<input class="customnextbutton" type='submit' name='submit' value='Submit'>
+
+	{% else %}
+		{{ form.question1.label }}
+		{% for choice in form.question1 %}
+			{% if forloop.counter0 in answer1 %}
+				<div class="select" style="color: green">{{ choice.tag }} {{ forloop.counter }}. {{ choice.choice_label }}</div>
+			{% else %}
+				<div class="select" style="color: red">{{ choice.tag }} {{ forloop.counter }}.  {{ choice.choice_label }}</div>
+			{% endif %}
+		{% endfor %}
+		<br>
+		<p>
+			You chose:
+			{% for answers in user.orientation5.question1 %}
+				{% if answers == '0' %}
+					{% if 0 in answer1 %}
+						<b style="color: green">1</b>
+					{% else %}
+						<b style="color: red">1</b>
+					{% endif %}
+				{% endif %}
+
+				{% if answers == '1' %}
+					{% if 1 in answer1 %}
+						<b style="color: green">2</b>
+					{% else %}
+						<b style="color: red">2</b>
+					{% endif %}
+				{% endif %}
+
+				{% if answers == '2' %}
+					{% if 2 in answer1 %}
+						<b style="color: green">3</b>
+					{% else %}
+						<b style="color: red">3</b>
+					{% endif %}
+				{% endif %}
+
+				{% if answers == '3' %}
+					{% if 3 in answer1 %}
+						<b style="color: green">4</b>
+					{% else %}
+						<b style="color: red">4</b>
+					{% endif %}
+				{% endif %}
+
+				{% if answers == '4' %}
+					{% if 4 in answer1 %}
+						<b style="color: green">5</b>
+					{% else %}
+						<b style="color: red">5</b>
+					{% endif %}
+				{% endif %}
+			{% endfor %}
+		</p>
+
+		<p style="padding: 10px; border: 2px solid black;">Explanation:
+			<br>
+			1) As a tutor, your role is more to review the information that tutees learn from their teachers in school and help them internalize and better understand those concepts. Our goal is to develop the student's learning autonomy, and their confidence in the subject matter. <br>
+			2) You are not responsible for designing lesson plans or curriculum (although we can look for these opportunities if you would like to take that away as an experience). You are also not responsible for the course business in terms or grades, grading, or assignment deadlines.</p>
+
+		<p></p>
+
+    {{ form.question2.label }}
+    <br>
+    {% for choice in form.question2 %}
+      {% if forloop.counter0 == answer2 %}
+        <div class="select" style="color: green">{{ choice.tag }} {{ choice.choice_label }}</div>
+        {% if user.orientation5.question2 == answer2 %}
+          ✅ Correct
+        <br>
+        {% endif %}
+      {% elif forloop.counter0 == user.orientation5.question2 %}
+        <div class="select" style="color: red">{{ choice.tag }} {{ choice.choice_label }}</div>
+          ❌ Incorrect
+        <br>
+      {% elif forloop.counter0 != user.orientation5.question2 %}
+        <div class="select">{{ choice.tag }} {{ choice.choice_label }}</div>
+      
+      {% endif %}
+    {% endfor %}
+    <br>
+
+    <p style="padding: 10px; border: 2px solid black;">Explanation:
+      <br>
+      1) While tutees will always have upcoming assignments or exams as their primary concerns, a tutor simply uses 
+			these as a vehicle to improve the student's general understanding of the material. Your role is not to complete 
+			the assignment for the tutee. Rather, your role would be to provide the guidance and the support that the tutee 
+			needs to successfully complete the assignment on their own. <br>
+			2) We would also encourage the tutee to make attempts to completing an assignment on their own rather than having 
+			others complete the assignment for them. For them to be an independent learner, they cannot depend on others to 
+			provide answers for them. If there are concepts they do not understand, they can bring in these concepts into 
+			a tutorial session for review.</p>
+
+    <p></p>
+
+	{% endif %}
+	{% if user.orientation5 %}
+	<a href="{% url 'tutor:orientation-6' %}">
+    	<button style="display: right; float: right;" type="button" class="customnextbutton">Next Training >>></button>
+	</a>
+	{% endif %}
+</form>
+<br>
+<br>
+<br>
+<br>
+{% endblock %}

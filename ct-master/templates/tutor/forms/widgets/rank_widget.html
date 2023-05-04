@@ -1,0 +1,18 @@
+{% load crispy_forms_field %}
+<div class="form-group">
+{{ field.label }}
+<table>
+{% for rank in rank_numbers %}
+    <tr>
+    <td>{{rank}}:</td>
+    <td>
+    <select name="{{field.name}}" id="{{field.id_for_label}}_{{rank}}">
+    {% for obj in rank_objects %}
+        <option value={{obj.value_text}}>{{obj.display_text}}</option>
+    {% endfor %}
+    </select>
+    </td>
+    </tr>
+{% endfor %}
+</table>
+</div>

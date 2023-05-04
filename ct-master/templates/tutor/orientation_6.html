@@ -1,0 +1,177 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<style>
+	.customnextbutton{
+	display: inline-block;
+	outline: 0;
+	border: none;
+	box-shadow: none;
+	cursor: pointer;
+	padding: 9px 22px;
+	font-size: 22px;
+	height: 50px;
+	font-weight: 400;
+	color: #fff;
+	text-align: center;
+	line-height: normal;
+	background: linear-gradient(90deg,purple 0,#CBC3E3 100%);
+	border-radius: 50px;
+	transition: color .2s ease,background-color .2s ease,box-shadow .2s ease;
+	}
+	.customnextbutton:not([disabled]):focus {
+		box-shadow: 0 0 .25rem rgba(0, 0, 0, 0.5), -.125rem -.125rem 1rem rgba(239, 71, 101, 0.5), .125rem .125rem 1rem rgba(255, 154, 90, 0.5);
+	}
+	.customnextbutton:not([disabled]):hover {
+		box-shadow: 0 0 .25rem rgba(0, 0, 0, 0.5), -.125rem -.125rem 1rem rgba(239, 71, 101, 0.5), .125rem .125rem 1rem rgba(255, 154, 90, 0.5);
+	}
+
+</style>
+
+<a href="{% url 'tutor:orientation-content' %}">
+  <button type="button" class="customnextbutton">back</button>
+</a>
+
+<br>
+<br>
+
+<h2>8. The Minimalist Tutoring Philosophy</h2>
+<iframe width="700" height="345" src="https://www.youtube.com/embed/0-eewJkjjDM"></iframe>
+<br>
+<br>
+
+<hr size="5" width="100%" color="black">  
+
+<p>
+  <b>You may fill out the questions below after you have completed the training.</b>
+</p>
+<form method="POST">
+	{% if not user.orientation6 %}
+		{% csrf_token %}
+		{% crispy form %}
+		<input class="customnextbutton" type='submit' name='submit' value='Submit'>
+
+	{% else %}
+		{{ form.question1.label }}
+		{% for choice in form.question1 %}
+			{% if forloop.counter0 in answer1 %}
+				<div class="select" style="color: green">{{ choice.tag }} {{ forloop.counter }}. {{ choice.choice_label }}</div>
+			{% else %}
+				<div class="select" style="color: red">{{ choice.tag }} {{ forloop.counter }}.  {{ choice.choice_label }}</div>
+			{% endif %}
+		{% endfor %}
+		<br>
+		<p>
+			You chose:
+			{% for answers in user.orientation6.question1 %}
+				{% if answers == '0' %}
+					{% if 0 in answer1 %}
+						<b style="color: green">1</b>
+					{% else %}
+						<b style="color: red">1</b>
+					{% endif %}
+				{% endif %}
+
+				{% if answers == '1' %}
+					{% if 1 in answer1 %}
+						<b style="color: green">2</b>
+					{% else %}
+						<b style="color: red">2</b>
+					{% endif %}
+				{% endif %}
+
+				{% if answers == '2' %}
+					{% if 2 in answer1 %}
+						<b style="color: green">3</b>
+					{% else %}
+						<b style="color: red">3</b>
+					{% endif %}
+				{% endif %}
+
+				{% if answers == '3' %}
+					{% if 3 in answer1 %}
+						<b style="color: green">4</b>
+					{% else %}
+						<b style="color: red">4</b>
+					{% endif %}
+				{% endif %}
+			{% endfor %}
+		</p>
+
+		<p style="padding: 10px; border: 2px solid black;">Explanation:
+			<br>
+			1) As a tutor, you should do your best to ensure that your tutee is able to understand the concepts they’re having trouble with. Students may have preferences for different modalities of learning, so you can incorporate multimedia in your sessions (videos/readings/images/audio) and/or ask probing questions to guide the tutee’s understanding. <br>
+			2) Students may also not have full understanding of the material at the end of 1 or 2 sessions. This is not a reflection on you as a tutor. Its important that students continue with the material at a pace that is comfortable for them. Its okay if the student needs to take a break, and come back to these concepts in a future session
+		</p>
+
+		<p></p>
+
+    {{ form.question2.label }}
+    {% for choice in form.question2 %}
+      {% if forloop.counter0 in answer2 %}
+        <div class="select" style="color: green">{{ choice.tag }} {{ forloop.counter }}. {{ choice.choice_label }}</div>
+      {% else %}
+        <div class="select" style="color: red">{{ choice.tag }} {{ forloop.counter }}.  {{ choice.choice_label }}</div>
+      {% endif %}
+    {% endfor %}
+
+    <br>
+    <p>
+    You chose:
+    {% for answers in user.orientation6.question2 %}
+      {% if answers == '0' %}
+        {% if 0 in answer2 %}
+          <b style="color: green">1</b>
+        {% else %}
+          <b style="color: red">1</b>
+        {% endif %}
+      {% endif %}
+
+      {% if answers == '1' %}
+        {% if 1 in answer2 %}
+          <b style="color: green">2</b>
+        {% else %}
+          <b style="color: red">2</b>
+        {% endif %}
+      {% endif %}
+      {% if answers == '2' %}
+        {% if 2 in answer2 %}
+          <b style="color: green">3</b>
+        {% else %}
+          <b style="color: red">3</b>
+        {% endif %}
+      {% endif %}
+
+      {% if answers == '3' %}
+        {% if 3 in answer2 %}
+          <b style="color: green">4</b>
+        {% else %}
+          <b style="color: red">4</b>
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+  </p>
+  
+  <p style="padding: 10px; border: 2px solid black;">Explanation:
+		<br>
+		1) For learners to successfully remember concepts in the long run, repetition is key. Help your tutee make a study schedule where they revisit concepts regularly and review the concepts in your sessions from time to time as well, to facilitate reiteration and hence, retrieval of the information in the learners’ long-term memory. <br>
+		2) Understanding may not come from 1 or 2 sessions. Learning is an iterative process, that may require multiple attempts at engagement before the student can complete an assignment. Be patient.
+	</p>
+
+  <p></p>
+
+	{% endif %}
+	{% if user.orientation6 %}
+	<a href="{% url 'tutor:orientation-7' %}">
+    	<button style="display: right; float: right;" type="button" class="customnextbutton">Next Training >>></button>
+  	</a>
+	{% endif %}
+</form>
+<br>
+<br>
+<br>
+<br>
+{% endblock %}

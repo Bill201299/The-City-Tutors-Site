@@ -1,0 +1,26 @@
+{% load crispy_forms_field %}
+<div class="form-group">
+<div class="requiredField">
+{{ field.label }}
+</div>
+<div class="custom-control btn-group-vertical">
+{% for index, day, hour, day_name, hour_name in index_day_hour_day_name_hour_name %}
+    {% if day == 0 %}
+    <div class="btn-group flex-nowrap">
+    {% endif %}
+    <input
+        type="checkbox" class="btn-check"
+        value={{day}},{{hour}}
+        id="{{field.id_for_label}}_{{index}}"
+        name="{{ field.name }}"
+        autocomplete="off">
+    <label
+        class="btn btn-outline-primary"
+        for="{{field.id_for_label}}_{{index}}">
+        {{day_name}}&nbsp;{{hour_name}}</label>
+    {% if day == 6 %}
+    </div>
+    {% endif %}
+{% endfor %}
+</div>
+</div>

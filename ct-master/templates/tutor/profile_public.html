@@ -1,0 +1,154 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% block content %}
+<h2 class="my-3">Profile: {{ profile_user.profile.full_name|default:profile_user.profile.nickname }}</h2>
+
+<div class="mb-5">
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Email</th>
+                <td>{{ profile_user.email }}</td>
+            </tr>
+            <tr>
+                <th>Phone number</th>
+                <td>{{ profile_user.profile.phone_number }}</td>
+            </tr>
+            {% if profile_user.parent_or_guardian_name %}
+            <tr>
+                <th>Parent/Guardian Name</th>
+                <td>{{ profile_user.parent_or_guardian_name }}</td>
+            </tr>
+            {% endif %}
+            <tr>
+                <th>Sector</th>
+                <td>{{ profile_user.profile.sector }}</td>
+            </tr>
+            <tr>
+                <th>Meetings</th>
+                <td>{{ scheduled_meetings.count|add:past_meetings.count }} meeting{{ scheduled_meetings.count|add:past_meetings.count|pluralize }} ({{ scheduled_meetings.count }} scheduled, {{ past_meetings.count }} past)</td>
+            </tr>
+            <tr>
+                <th>Requests</th>
+                <td>{{ tutor_requests.count }} request{{ tutor_requests.count|pluralize }} ({{ fulfilled_tutor_requests.count }} fulfilled, {{ unfulfilled_tutor_requests.count }} unfulfilled)</td>
+            </tr>
+            {% if assessments %}
+            <tr>
+                <th>Average length of session</th>
+                <td>{{ meeting_summary.duration__avg }}</td>
+            </tr>
+            <tr>
+                <th>Total hours</th>
+                <td>{{ meeting_summary.duration__sum }}</td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+
+
+<div class="mb-5">
+    <h3>Tutor Requests</h3>
+    {% if tutor_requests %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Request Created</th>
+                <th>Subject</th>
+                <th>Notes</th>
+                <th>Meeting</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for tutor_request in tutor_requests %}
+            <tr>
+                <td>{{ tutor_request.timestamp }}</td>
+                <td>{{ tutor_request.subject }}</td>
+                <td>{{ tutor_request.notes }}</td>
+                {% if tutor_request.meeting %}
+                <td class="table-success">{{ tutor_request.meeting }}</td>
+                {% else %}
+                <td class="table-danger">{{ tutor_request.meeting }}</td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>This student has not requested tutoring yet.</p>
+    {% endif %}
+</div>
+
+<div class="mb-5">
+    <h3>Past Meetings</h3>
+    {% if past_meetings %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Tutor</th>
+                <th>Tutor Email</th>
+                <th>Subject</th>
+                <th>Number of students</th>
+                <th>Start</th>
+                <th>Duration</th>
+                <th>Assessment (0-20)</th>
+                <th>Notes</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for meeting in past_meetings %}
+            <tr>
+                <td>{{ meeting.tutors_str }}</td>
+                <td>{{ meeting.tutor_emails }}</td>
+                <td>{{ meeting.subject.display }}</td>
+                <td>{{ meeting.num_students }}</td>
+                <td>{{ meeting.start_datetime|default_if_none:"–" }}</td>
+                <td>{{ meeting.duration|default_if_none:"–" }}</td>
+                <td>
+                    {% if meeting.assessment.first %}
+                    {{ meeting.assessment.first.assessment }}
+                    {% else %}
+                    –
+                    {% endif %}
+                </td>
+                <td>{{ meeting.notes|default_if_none:"–" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>This student does not have any past meetings.</p>
+    {% endif %}
+</div>
+
+
+<div class="mb-5">
+    <h3>Scheduled Sessions</h3>
+    {% if scheduled_meetings %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Tutor</th>
+                <th>Tutor Email</th>
+                <th>Subject</th>
+                <th>Scheduled start</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for meeting in scheduled_meetings %}
+            <tr>
+                <td>{{ meeting.tutors_str }}</td>
+                <td>{{ meeting.tutor_emails }}</td>
+                <td>{{ meeting.subject.display }}</td>
+                <td>{{ meeting.scheduled_start }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>This student does not have any scheduled sessions.</p>
+    {% endif %}
+</div>
+
+{% endblock %}

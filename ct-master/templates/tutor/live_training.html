@@ -1,0 +1,182 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% block content %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+<script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
+<script>
+    $(document).ready(function(){
+        function hideInputs(){
+            $("#id_form").hide();
+            $("#id_input").hide();
+            $("#id_validation").hide();
+        }
+
+        function showInputs(){
+            $("#id_form").slideToggle();
+        }
+
+        $("#id_trainer").change(function (event) {
+            hideInputs();
+            $('#id_passcode').val('');
+            
+            if($("#id_trainer").val() == "") {
+                hideInputs();
+            }
+            else{
+                $("#id_input").slideToggle();
+            }
+        });
+
+        $("#id_passcode").on('change keyup paste', function (event){
+            if($('#id_passcode').val() == 219997 && $("#id_trainer option:selected").text() == "Michael Chin" ||
+            $('#id_passcode').val() == 413258 && $("#id_trainer option:selected").text() == "Naomi Mackliff" ||
+            $('#id_passcode').val() == 219997 && $("#id_trainer option:selected").text() == "Cerita Asante" ||
+            $('#id_passcode').val() == 820667 && $("#id_trainer option:selected").text() == "Gabriel Dailey" ||
+            $('#id_passcode').val() == 591777 && $("#id_trainer option:selected").text() == "Anderson Miller" 
+            ){
+                showInputs();
+                $("#id_input").hide(); 
+                $("#id_validation").hide();
+                $('#id_passcode').val('');
+                
+            }
+            else if($('#id_passcode').val().length >= 6){
+                $('#id_passcode').val('');
+                $("#id_validation").show();
+                $('#id_passcode').blur();
+            }
+            else if($('#id_passcode').val().length < 6){
+                $("#id_validation").hide();
+            }
+        });
+
+        hideInputs();
+        $("#id_validation").hide();
+        $('#id_passcode').keyup(function(){
+            this.value=this.value.replace(/[^0-9\.]/g,'');
+        });
+
+        formmodified=0;
+
+        $('form *').change(function(){
+            formmodified=1;
+        });
+
+        window.onbeforeunload = confirmExit;
+        function confirmExit() {
+            if (formmodified == 1) {
+                return "New information not saved. Do you wish to leave the page?";
+            }
+        }
+        $("#id_submit").click(function() {
+        formmodified = 0;
+    });
+    });
+
+    
+        
+
+</script>
+<link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+<style>
+    .main-menu:link{
+        color:black;
+        text-decoration: none;
+    }
+
+    .main-menu:visited{
+        color: black;
+        text-decoration: none;
+    }
+
+    .main-menu:hover{
+        color:gray;
+    }
+
+    .trainer-button{
+        background-color:white;
+        color: black;
+        width: 100%; 
+        padding: 5%;
+        border-bottom: none;
+        border-color: gray;
+        border-style: solid;
+        border-top: none;
+        transition: color .2s ease,background-color .2s ease,box-shadow .2s ease;
+    }
+
+    .trainer-button:hover{
+        background-color:#a8c9b8;
+        color:black;
+    }
+
+    .title-box{
+        background-color: #532c8c; 
+        color:white;  
+        padding: 5%;
+    }
+
+</style>
+
+<body>
+    <p>
+        <h2>Live Training Worksheet</h2>
+        &emsp; <a class = main-menu href="{% url 'tutor:orientation' %}">&#8592 <b style="border-bottom:1px solid red;">MAIN PAGE | Onboarding</b></a>
+        <br>
+        <hr>
+    </p>
+    {% if not request.user.livesession %}
+
+    <p><b>Objective</b> <br>
+        At the end of this session, you can summarize the key points of the training modules, including CT standards of ethics and professionalism and core concepts of tutoring best practices.
+    </p>
+    <br>
+    <div style="width: 80%; margin: auto; text-align: center;">
+        <div class="title-box" style="border-style: none; border-color: gray; border-style: solid; border-bottom: none; border-radius: 25px 25px 0px 0px;">
+            <span style="font-size: 20px;">1. Make an appointment </span>
+        </div>
+        <div style="background-color: #dbdbf8;">
+            <a href="" onclick= "Calendly.initPopupWidget({url: 'https://calendly.com/naomimackliff/live-training-session-with-naomi'});return false;"><button class="trainer-button" style="border-top: 2px solid gray;">Naomi Mackliff</button><br></a>
+            <a href="" onclick= "Calendly.initPopupWidget({url: 'https://calendly.com/scrystalgarcia/citytutors'}); return false;"><button class="trainer-button">Crystal Garcia</button><br></a>
+            <a href="" onclick= "Calendly.initPopupWidget({url: 'https://calendly.com/gabrieldailey1/90min'});return false;"><button class="trainer-button">Gabriel Dailey</button><br></a>
+            <a href="" onclick= "Calendly.initPopupWidget({url: 'https://calendly.com/newmillernyc/60min'});return false;"><button class="trainer-button" style="border-bottom: none;">Anderson Miller</button><br></a>
+        </div>
+        <div class="title-box" style="font-size: 20px; border-style: none; border-color: gray; border-style: solid; border-bottom: none;">2. Join the session</div>
+        <div style="padding: 5%; border-style: solid; border-bottom: none; border-top: none; border-color: gray;">
+            Make sure to save 6 digit code the trainer gives you. (Needed for #3 on this page)
+        </div>
+        <form id="myForm" method='post'>
+            <div class="title-box" style="border-style: none; border-color: gray; border-style: solid; border-radius: 0px 0px 25px 25px;">
+                <p style="font-size: 20px;">3. Choose your trainer</p>
+                {{ form.trainer }}
+                <br><br>
+                <div id="id_input" style="background-color: #a8c9b8; border-style: none; border-color: gray; border-style: solid; width: 50%; margin: auto; border-radius: 25px; padding: 5%;"> 
+                    <label for="id_passcode">Passcode:</label>
+                    <input id="id_passcode" type="text" name="passcode" style="width: 90%;"><br>
+                    <label for="id_passcode">(Will be provided by your trainer during the training session)</label>
+                    <br>
+                    <span id="id_validation" style="color: red"><b>Wrong code</b></span>
+                </div>
+
+            </div>
+            
+            <br>
+            <div id="id_form" style="background-color: #a8c9b8; padding: 5%; border-style: none; border-color: gray; border-style: solid; border-radius: 25px;">
+                <p id="id_required"><span style='color:red'>*</span> Indicates a required field</p>
+                {% csrf_token %}
+                {% crispy form %}
+            </div>
+
+        </form>
+        {% else %}
+        <br>
+        <div style="width: 50%; margin: auto; background-color: #a8c9b8; padding: 5%; border-radius: 25px; text-align:center;">
+            <span>Your response has been <b>saved.</b></span>
+        </div>
+        {% endif %}
+    </div>
+    <div style="background: white; height: 200px;">
+    </div>
+</body>
+{% endblock %}

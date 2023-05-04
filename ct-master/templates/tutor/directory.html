@@ -1,0 +1,86 @@
+{% extends "base/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<h1>Directory</h1>
+<ul class="list-group">
+{% for site in sites %}
+{% if site.id == site_id %}
+    <a href="{% url 'tutor:directory' %}" class="list-group-item list-group-item-action active">{{ site }}</a>
+{% else %}
+<a href="{% url 'tutor:directory' %}?site_id={{site.id}}" class="list-group-item list-group-item-action">{{ site }}</a>
+{% endif %}
+{% endfor %}
+{% if site_id == -1 %}
+<a href="{% url 'tutor:directory' %}" class="list-group-item list-group-item-action active">Not affiliated</a>
+{% else %}
+<a href="{% url 'tutor:directory' %}?site_id=-1" class="list-group-item list-group-item-action">Not affiliated</a>
+{% endif %}
+</ul>
+<br>
+<form class="form-inline my-2 my-lg-0">
+    <input class="form-control mr-sm-2" type="search"  placeholder="Input Name or Phone Number Here" aria-label="Search" name="search">
+    <button class="btn btn-outline-primary btn-sm" type="submit" name = "submit_search">Search</button>
+</form>
+
+<script>
+    function refreshPage() {
+    location.reload(true);
+    }
+
+    function add_student(id){
+    console.log("running");
+    $.ajax({
+        url : "/add_student/", // the endpoint
+        type : "GET", // http method
+        data : {  
+                id : id 
+            }, // data sent with the get request
+
+        // handle a successful response
+        success : function(json) {
+            console.log("success"); // another sanity check
+
+            setInterval("refreshPage()", 300);
+           
+        },
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+        }
+    });
+};
+</script>
+
+{% if search_result %}
+<table class="table table-hover">
+    <thead>
+      <th>Name</th>
+      <th>Phone Number</th>
+      <th> Site</th>
+      <th>Site Location<th>
+      <ths tyle="text-align: center">Add Student</th>
+    </thead>
+    <ul>
+        {% for r in search_result %}
+        <tr>
+            <td> {{ r.profile__full_name }} </td>
+            <td> {{ r.profile__phone_number }} </td>
+            <td> {{ r.profile__site__display}}</td>
+            <td> {{ r.profile__site_location__display }}</td>
+            <td >
+                <button id = "inner_btn" class="btn btn-outline-primary btn-sm" style="height:30px;width: 60px ;" name="button"  onclick= "add_student(this.getAttribute('data-id'))" data-id={{r.id}}> Add</button>             
+            </td>
+        </tr>
+        {% endfor %}  
+    </ul>
+  </table>
+{% endif %}
+
+<form method='post'>
+    {% csrf_token %}
+    {% crispy form %}
+</form>
+
+
+{% endblock %}

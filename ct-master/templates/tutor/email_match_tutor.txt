@@ -1,0 +1,4 @@
+Hi {{ tutor_name }},
+You have an upcoming tutoring session in {{ subject }} on {{ scheduled_date }} Eastern! At least one student has confirmed their attendance.
+Please go to {{ status_link }} and confirm by {{ confirmation_deadline }} Eastern. If you cannot make it, please cancel your attendance.
+The City Tutors

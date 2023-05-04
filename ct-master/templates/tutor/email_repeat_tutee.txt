@@ -1,0 +1,4 @@
+Hi {{ tutee_name }},
+We have scheduled a repeat session next week for {{ subject }} tutoring with {{ tutor_name }}.
+Please view session details at https://app.thecitytutors.org/request.
+The City Tutors

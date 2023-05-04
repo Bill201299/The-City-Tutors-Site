@@ -1,0 +1,32 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% block content %}
+<h2>Session</h2>
+
+<table>
+	<tr>
+		<th>Tutor{% if tutors.count > 1 %}s{% endif %}</th>
+		<td>
+			{% for tutor in tutors %}
+			{{ tutor.profile.full_name }} 
+			{% endfor %}
+		</td>
+	</tr>
+	<tr>
+		<th>Start</th>
+		<td>{{ session.start_datetime }}</td>
+	</tr>
+	<tr>
+		<th>End</th>
+		<td>{{ session.stop_datetime }}</td>
+	</tr>
+	<tr>
+		<th>Notes</th>
+		<td>{{ session.notes }}</td>
+	</tr>
+	<tr>
+		<th>Number of students</th>
+		<td>{{ tutees.count }}</td>
+	</tr>
+</table>
+{% endblock %}

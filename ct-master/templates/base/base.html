@@ -1,0 +1,240 @@
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<script type="text/javascript"> (function() { var css = document.createElement('link'); css.href = 'https://use.fontawesome.com/releases/v6.2.0/css/all.css'; css.rel = 'stylesheet'; css.type = 'text/css'; document.getElementsByTagName('head')[0].appendChild(css); })(); </script>
+<style>
+.navbar-nav .nav-item .nav-link:hover {
+    background-color: #f8ad2e;
+}
+.navbar-nav > li {
+  float: left;
+  position: relative;
+  text-align: center;
+  width: 85px;
+}
+.navbar-nav .active { 
+  background-color: #f8ad2e;
+}
+
+.navbar-nav > li > a{
+  font-size:13px; 
+  padding-top: 15%;
+}
+
+.navbar-nav > li > a > i{
+  font-size:20px; 
+  position: relative;
+}
+</style>
+{% load static %}
+
+  <html>
+    
+    <head>
+      <title>The City Tutors</title>
+      <link href="{% static 'tutor/boostrap-chosen.css' %}" rel="stylesheet">
+      <link rel="stylesheet" type="text/css" href="{% static 'tutor/style.css' %}">
+      <link rel="shortcut icon" type="image/x-icon" href="https://images.squarespace-cdn.com/content/v1/5ee289356a65d4658758939b/1592425943853-4YRE3AGOEWBWQQWP88TQ/favicon.ico?format=100w"/>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> 
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script> 
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    </head> 
+
+  <body>
+    <div>
+      {% block nav %}
+      <nav class="bg-primary navbar sticky-top navbar-expand-md navbar-dark container-fluid" style="padding: 0;">
+
+        <div class="container">
+          <a class="navbar-brand" href="{% url 'tutor:home' %}"><img src="{% static 'tutor/logo.png' %}" width="50" height="50" alt="The City Tutors"></a>
+          <a class="navbar-brand" href="{% url 'tutor:home' %}">The City Tutors</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarNav">
+           
+            <ul class="navbar-nav ms-auto py-0">
+                
+              {% if user.is_authenticated and user.is_active %}
+
+                {% if user.profile.account_type.display == "Program-Coordinator" %}
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'tutor:site_portal' %}">
+                      <i class="fa fa-file"></i><br>Site Portal</a>
+                  </li>
+
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout' %}">
+                      <i class="fa-solid fa-right-from-bracket"></i><br>Logout</a>
+                  </li>
+
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'tutor:support' %}">
+                      <i class="fa-regular fa-circle-question"></i><br>Support</a>
+                  </li>
+                {% endif %}
+
+                {% if user.profile.onboarded %}
+
+                  {% if user.profile.account_type.display == "Tutor" %}
+
+                    {% if user.profile.tutor_training_stage == "finished" and user.backgroundcheckrequest.status == "Approved" %}
+                      <li class="nav-item">
+                        {% if navbar == "clock" %}
+                          <a class="nav-link active" href="{% url 'tutor:clock' %}">
+                            <i class="fa fa-clock"></i><br>Clock I/O</a>
+                        {% else %}
+                          <a class="nav-link" href="{% url 'tutor:clock' %}">
+                            <i class="fa fa-clock"></i><br>Clock I/O</a>
+                        {% endif %}
+                      </li>
+
+                      <li class="nav-item">
+                        {% if navbar == "meetings" %}
+                          <a class="nav-link active" href="{% url 'tutor:request' %}">
+                            <i class="fa-solid fa-handshake"></i><br>Meetings</a>
+                        {% else %}
+                          <a class="nav-link" href="{% url 'tutor:request' %}">
+                            <i class="fa-solid fa-handshake"></i><br>Meetings</a>
+                        {% endif %}
+                      </li>
+
+                      <li class="nav-item">
+                        {% if navbar == "history" %}
+                          <a class="nav-link active" href="{% url 'tutor:past-meetings' %}">
+                            <i class="fa-solid fa-clock-rotate-left"></i><br>History</a>
+                        {% else %}
+                          <a class="nav-link" href="{% url 'tutor:past-meetings' %}">
+                            <i class="fa-solid fa-clock-rotate-left"></i><br>History</a>
+                        {% endif %}
+                      </li>
+
+                      <li class="nav-item">
+                        {% if navbar == "resources" %}
+                          <a class="nav-link active" href="{% url 'tutor:orientation' %}">
+                            <i class="fa fa-file"></i><br>Resources</a>
+                        {% else %}
+                          <a class="nav-link" href="{% url 'tutor:orientation' %}">
+                            <i class="fa fa-file"></i><br>Resources</a>
+                        {% endif %}
+                      </li>
+
+<!--                       <li class="nav-item">
+                        {% if navbar == "notification" %}
+                          <a class="nav-link active" href="{% url 'tutor:clock' %}">
+                            <i class="fa-solid fa-bell"></i><br>Notification</a>
+                        {% else %}
+                          <a class="nav-link" href="{% url 'tutor:clock' %}">
+                            <i class="fa-solid fa-bell"></i><br>Notification</a>
+                        {% endif %}
+                      </li> -->
+
+                    {% else %}
+
+                      <li class="nav-item">
+                        <a class="nav-link" href="{% url 'tutor:orientation' %}">
+                          <i class="fa fa-file"></i><br>Training</a>
+                      </li>
+
+                    {% endif %}
+
+                    <li class="nav-item dropdown">
+                      {% if navbar == "profile" %}
+                        <a class="nav-link dropdown-toggle active" href="" id="navbarDropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <i class="fa fa-user"></i><br>
+                          Me
+                        </a>
+                      {% else %}
+                        <a class="nav-link dropdown-toggle" href="" id="navbarDropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <i class="fa fa-user"></i><br>
+                          Me
+                        </a>
+                      {% endif %}
+                      <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="{% url 'tutor:profile' %}">Settings</a>
+                        <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{% url 'tutor:support' %}">Support</a>
+                      </div>
+                    </li>
+
+                  {% endif %}
+
+                  {% if user.profile.account_type.display == "K-12-Tutee" or user.profile.account_type.display == "College-Tutee" or user.profile.account_type.display == "Adult-Tutee" %}
+
+                    <li class="nav-item">
+                      <a class="nav-link" href="{% url 'tutor:request' %}">
+                        <i class="fa-solid fa-handshake"></i><br>Meetings</a>
+                    </li>
+
+                    <li class="nav-item">
+                      <a class="nav-link" href="{% url 'tutor:past-meetings' %}">
+                        <i class="fa-solid fa-clock-rotate-left"></i><br>History</a>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" href="" id="navbarDropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-user"></i><br>
+                        Me
+                      </a>
+                      <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="{% url 'tutor:profile' %}">Settings</a>
+                        <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{% url 'tutor:support' %}">Support</a>
+                      </div>
+                    </li>
+
+                  {% endif %}
+
+                {% else %}
+          
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout' %}">
+                      <i class="fa-solid fa-right-from-bracket"></i><br>Logout</a>
+                  </li>
+
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'tutor:support' %}">
+                      <i class="fa-regular fa-circle-question"></i><br>Support</a>
+                  </li>
+
+                {% endif %}
+
+              {% else %}
+
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'tutor:login' %}">
+                    <i class="fa-solid fa-right-from-bracket"></i><br>Login</a>
+                </li>
+
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'tutor:support' %}">
+                    <i class="fa-regular fa-circle-question"></i><br>Support</a>
+                </li>
+              
+              {% endif %}
+
+            </ul>
+          </div>
+        </div>
+      </nav>
+      {% endblock %}
+      {% if messages %}
+        {% for message in messages %}
+          <div {% if message.tags %} class="alert mb-0 {{ message.tags }}" {% endif %}> <div class="container"> {{ message }} </div></div>
+        {% endfor %}
+      {% endif %}
+      <div class="container mt-2">
+        {% block content %}{% endblock %}
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="http://harvesthq.github.io/chosen/chosen.jquery.js"></script>
+    <script>$(".chosen-select").chosen({include_group_label_in_selected: true});</script>
+    {% block extrascripts %}
+    {% endblock extrascripts%}
+  </body>
+  </html>

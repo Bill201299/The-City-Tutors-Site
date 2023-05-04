@@ -1,0 +1,181 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<style>
+	.customnextbutton{
+	display: inline-block;
+	outline: 0;
+	border: none;
+	box-shadow: none;
+	cursor: pointer;
+	padding: 9px 22px;
+	font-size: 22px;
+	height: 50px;
+	font-weight: 400;
+	color: #fff;
+	text-align: center;
+	line-height: normal;
+	background: linear-gradient(90deg,purple 0,#CBC3E3 100%);
+	border-radius: 50px;
+	transition: color .2s ease,background-color .2s ease,box-shadow .2s ease;
+	}
+	.customnextbutton:not([disabled]):focus {
+		box-shadow: 0 0 .25rem rgba(0, 0, 0, 0.5), -.125rem -.125rem 1rem rgba(239, 71, 101, 0.5), .125rem .125rem 1rem rgba(255, 154, 90, 0.5);
+	}
+	.customnextbutton:not([disabled]):hover {
+		box-shadow: 0 0 .25rem rgba(0, 0, 0, 0.5), -.125rem -.125rem 1rem rgba(239, 71, 101, 0.5), .125rem .125rem 1rem rgba(255, 154, 90, 0.5);
+	}
+
+</style>
+
+<a href="{% url 'tutor:orientation-content' %}">
+  <button type="button" class="customnextbutton">back</button>
+</a>
+
+<br>
+<br>
+
+<h2>4. Representative Problem Exercise</h2>
+<iframe width="700" height="345" src="https://www.youtube.com/embed/gVn2Tw5EkHs"></iframe>
+<iframe width="700" height="345" src="https://www.youtube.com/embed/y4Ai_IwZRB0"></iframe>
+<br>
+<br>
+
+<hr size="5" width="100%" color="black">  
+
+<p>
+  <b>You may fill out the questions below after you have completed the training.</b>
+</p>
+<form method="POST">
+	{% if not user.orientation11 %}
+		{% csrf_token %}
+		{% crispy form %}
+		<input class="customnextbutton" type='submit' name='submit' value='Submit'>
+
+	{% else %}
+		{{ form.question1.label }}
+		{% for choice in form.question1 %}
+			{% if forloop.counter0 in answer1 %}
+				<div class="select" style="color: green">{{ choice.tag }} {{ forloop.counter }}. {{ choice.choice_label }}</div>
+			{% else %}
+				<div class="select" style="color: red">{{ choice.tag }} {{ forloop.counter }}.  {{ choice.choice_label }}</div>
+			{% endif %}
+		{% endfor %}
+		<br>
+		<p>
+			You chose:
+			{% for answers in user.orientation11.question1 %}
+				{% if answers == '0' %}
+					{% if 0 in answer1 %}
+						<b style="color: green">1</b>
+					{% else %}
+						<b style="color: red">1</b>
+					{% endif %}
+				{% endif %}
+
+				{% if answers == '1' %}
+					{% if 1 in answer1 %}
+						<b style="color: green">2</b>
+					{% else %}
+						<b style="color: red">2</b>
+					{% endif %}
+				{% endif %}
+
+				{% if answers == '2' %}
+					{% if 2 in answer1 %}
+						<b style="color: green">3</b>
+					{% else %}
+						<b style="color: red">3</b>
+					{% endif %}
+				{% endif %}
+
+				{% if answers == '3' %}
+					{% if 3 in answer1 %}
+						<b style="color: green">4</b>
+					{% else %}
+						<b style="color: red">4</b>
+					{% endif %}
+				{% endif %}
+			{% endfor %}
+		</p>
+
+		<p style="padding: 10px; border: 2px solid black;">Explanation:
+			<br>
+			1) While minimalism features an inquiry based approach to support the student. First, the tutor needs to understand what the student does and doesn't know about the problem, so the first questions they'll ask will always be geared to making sure the student knows what concepts are involved in the problem. If, through these questions, the student doesn't understand the concept, then the tutor switches to using guiding questions to see if the student can progress to the next stage of the problem. <br><br>
+			2) But, if the student doesn't have the required knowledge to solve the problem, then asking additional questions will not lead to them progressing to solve the problem. In order for the session to progress, the tutor will need to model for the student a problem solving strategy that can be used for this problem. The tutor will pick a problem representative of what the student is working on, and then ask the student questions about how they solved it. The tutor will then ask the student to use that same strategy, and apply it to the problem they are having difficulty with. <br><br>
+			3) Its important that a tutor doesn't become "too minimalist" and think that only questions is sufficient to be a tutor. Tutors need to strike a balance between making sure the student is in control of their learning, and that the student is learning.
+		</p>
+
+		<p></p>
+
+    {{ form.question2.label }}
+    {% for choice in form.question2 %}
+      {% if forloop.counter0 in answer2 %}
+        <div class="select" style="color: green">{{ choice.tag }} {{ forloop.counter }}. {{ choice.choice_label }}</div>
+      {% else %}
+        <div class="select" style="color: red">{{ choice.tag }} {{ forloop.counter }}.  {{ choice.choice_label }}</div>
+      {% endif %}
+    {% endfor %}
+
+    <br>
+    <p>
+			You chose:
+			{% for answers in user.orientation11.question2 %}
+				{% if answers == '0' %}
+					{% if 0 in answer2 %}
+						<b style="color: green">1</b>
+					{% else %}
+						<b style="color: red">1</b>
+					{% endif %}
+				{% endif %}
+
+				{% if answers == '1' %}
+					{% if 1 in answer2 %}
+						<b style="color: green">2</b>
+					{% else %}
+						<b style="color: red">2</b>
+					{% endif %}
+				{% endif %}
+				{% if answers == '2' %}
+					{% if 2 in answer2 %}
+						<b style="color: green">3</b>
+					{% else %}
+						<b style="color: red">3</b>
+					{% endif %}
+				{% endif %}
+
+				{% if answers == '3' %}
+					{% if 3 in answer2 %}
+						<b style="color: green">4</b>
+					{% else %}
+						<b style="color: red">4</b>
+					{% endif %}
+				{% endif %}
+			{% endfor %}
+  	</p>
+  
+		<p style="padding: 10px; border: 2px solid black;">Explanation:
+			<br>
+			Helping the student to be an independent learner involves more than just making sure that they have mastery of the current material. Students may also need help with developing skills and material to assist them in learning future concepts. This can include strategies for managing time, taking notes, and reflecting on recurring issues that they have with the material. Most of these strategies take time to develop at first, but over time they will give the student the toolkit they need to approach new concepts
+		</p>
+
+		<p></p>
+
+	{% endif %}
+	{% if user.orientation11 %}
+	<b style="display: right; float: right;">You are finished with "Required Orientation Training"</b>
+	<br>
+	<div>
+		<a href="{% url 'tutor:orientation-content' %}">
+			<button style="display: right; float: right;" type="button" class="customnextbutton">Done</button>
+		  </a>
+	{% endif %}
+</form>
+<br>
+<br>
+<br>
+<br>
+{% endblock %}

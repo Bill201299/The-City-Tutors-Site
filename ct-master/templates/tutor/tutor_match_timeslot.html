@@ -1,0 +1,56 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<h1 class="mt-4 mb-4">Match Yourself with a Student</h1>
+
+<table class="table table-sm">
+    <thead>
+        <tr>
+            <th>Sector</th>
+            <th>Subject</th>
+            <th>Time Slot</th>
+            <th>Sites</th>
+            <th>Student Request Notes</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for request in unfulfilled_requests %}
+        {% for timeslot in request.user.profile.available.all %}
+        <tr>
+            {% if request.subject_match %}
+                <td class="table-success">{{ request.user.profile.sector.display }}</td>
+                {% else %}
+                <td>{{ request.user.profile.sector.display }}</td>
+            {% endif %}
+            {% if request.subject_match %}
+                <td class="table-success">{{ request.subject.display }}</td>
+                {% else %}
+                <td>{{ request.subject.display }}</td>
+            {% endif %}
+
+            {% if timeslot in tutor_timeslots %}
+                <td class="table-success">{{ timeslot }}</td>
+                {% else %}
+                <td>{{ timeslot }}</td>
+            {% endif %}
+
+            <td> {{ request.user.profile.site.display }} </td>
+
+            <td>{{ request.notes }}</td>
+            <td>
+                <form method="post" class="mb-0">
+                    {% csrf_token %}
+                    <input type="hidden" name="request_id" value="{{ request.id }}">
+                    <input type="hidden" name="timeslot_id" value="{{ timeslot.id }}">
+                    <input type="submit" name="submit" value="Schedule a Meeting" class="btn btn-outline-primary btn-sm">
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
